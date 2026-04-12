@@ -5,15 +5,17 @@ export function displayItems(){
 
     cart.forEach((product) =>{
         accumulatorPattern +=
-        `<img
+        `<div class="flex justify-center">
+        <img
           src="${product.productImage}"
           class="h-[100px] object-contain"
           alt=""/>
-        <div>
-        <p><strong>Product Name:</strong> ${product.productName}</p>
-          <p><strong>Product Item:</strong> ${product.productColor}</p>
-          <p><strong>Product Size:</strong> ${product.productSize}</p>
-          <p><strong>Product Quantity:</strong> ${product.quantity}</p>
+          </div>
+        <div class="text-center">
+        <p>${product.productName}</p>
+          <p>${product.productColor}</p>
+          <p>${product.productSize}</p>
+          <p>${product.quantity}</p>
           </div>
         `
 
@@ -22,5 +24,7 @@ export function displayItems(){
         if(container){
             container.innerHTML = accumulatorPattern
         }
+
+      
     })
 }
