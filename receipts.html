@@ -1,0 +1,3419 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Receipt Dashboard | Serene Eatery</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+
+*{
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 400 !important;
+}
+
+button,
+input,
+select{
+    cursor: pointer;
+}
+
+button:disabled{
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+.toast{
+    transform: translateY(-20px);
+    opacity: 0;
+    pointer-events: none;
+    transition: .3s;
+}
+
+.toast.show{
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+</style>
+
+</head>
+
+
+<body class="bg-gray-100 text-gray-800">
+
+
+<!-- TOAST -->
+
+<div
+id="toast"
+class="toast fixed top-24 right-5 z-[100] bg-white border shadow-lg p-4 w-80">
+
+<p id="toastTitle" class="text-black"></p>
+
+<p
+id="toastMessage"
+class="text-sm text-gray-500 mt-1">
+</p>
+
+</div>
+
+
+<!-- PAYMENT MODAL -->
+
+<div
+id="paymentModal"
+class="hidden fixed inset-0 bg-black/40 z-[90] flex items-center justify-center p-5">
+
+<div
+class="bg-white w-full max-w-md border p-6">
+
+<h2 class="text-xl">
+Confirm Debt Payment
+</h2>
+
+<p
+id="paymentCustomer"
+class="text-gray-500 mt-2">
+</p>
+
+
+<div class="mt-5">
+
+<p class="text-xs text-gray-400">
+AMOUNT
+</p>
+
+<p
+id="paymentAmount"
+class="text-2xl mt-2">
+
+Ksh 0
+
+</p>
+
+</div>
+
+
+<div class="mt-6">
+
+<label class="text-xs text-gray-500">
+PAYMENT METHOD
+</label>
+
+
+<select
+id="debtPaymentMethod"
+class="w-full border p-3 mt-2">
+
+<option value="">
+Select payment method
+</option>
+
+<option value="Cash">
+Cash
+</option>
+
+<option value="Pochi">
+Pochi
+</option>
+
+</select>
+
+</div>
+
+
+<div class="flex gap-3 mt-6">
+
+<button
+onclick="closePaymentModal()"
+class="flex-1 border p-3 hover:bg-gray-50 transition">
+
+Cancel
+
+</button>
+
+
+<button
+onclick="confirmDebtPayment()"
+class="flex-1 bg-black text-white p-3">
+
+Confirm Payment
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- HEADER -->
+
+<header
+class="fixed top-0 left-0 w-full bg-white border-b z-50">
+
+<nav
+class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+
+<a
+href="index.html"
+class="text-xl text-green-900">
+
+Serene Eatery
+
+</a>
+
+
+<div
+class="hidden md:flex gap-5 text-sm">
+
+<a
+href="waiter.html"
+class="hover:text-green-900 transition">
+Waiter
+</a>
+
+<a
+href="cashier.html"
+class="hover:text-green-900 transition">
+Cashier
+</a>
+
+<a
+href="stock.html"
+class="hover:text-green-900 transition">
+Stock
+</a>
+
+<a
+href="receipts.html"
+class="text-green-900">
+Receipts
+</a>
+
+<a
+href="admin.html"
+class="hover:text-green-900 transition">
+Admin
+</a>
+
+</div>
+
+</nav>
+
+</header>
+
+
+<!-- MAIN -->
+
+<main
+class="max-w-7xl mx-auto px-6 pt-28 pb-12">
+
+
+<div
+class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-8">
+
+<div>
+
+<h1 class="text-3xl text-black">
+Receipt Dashboard
+</h1>
+
+<p class="text-gray-500 mt-2">
+Confirmed sales, customer debts and paid debt receipts.
+</p>
+
+</div>
+
+
+<button
+onclick="render()"
+class="border bg-white px-5 py-3 hover:bg-gray-50 transition">
+
+Refresh
+
+</button>
+
+</div>
+
+
+<!-- SUMMARY -->
+
+<div
+class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+
+
+<div class="bg-white border p-5">
+
+<p class="text-xs text-gray-400">
+RECEIPTS
+</p>
+
+<p
+id="receiptCount"
+class="text-2xl mt-2">
+
+0
+
+</p>
+
+</div>
+
+
+<div class="bg-white border p-5">
+
+<p class="text-xs text-gray-400">
+TOTAL SALES
+</p>
+
+<p
+id="receiptSales"
+class="text-2xl mt-2">
+
+Ksh 0
+
+</p>
+
+</div>
+
+
+<div class="bg-white border p-5">
+
+<p class="text-xs text-gray-400">
+CASH
+</p>
+
+<p
+id="receiptCash"
+class="text-2xl mt-2">
+
+Ksh 0
+
+</p>
+
+</div>
+
+
+<div class="bg-white border p-5">
+
+<p class="text-xs text-gray-400">
+POCHI
+</p>
+
+<p
+id="receiptPochi"
+class="text-2xl mt-2">
+
+Ksh 0
+
+</p>
+
+</div>
+
+
+<div class="bg-white border p-5">
+
+<p class="text-xs text-gray-400">
+PENDING DEBT
+</p>
+
+<p
+id="debtTotal"
+class="text-2xl mt-2">
+
+Ksh 0
+
+</p>
+
+</div>
+
+
+</div>
+
+
+<!-- PRODUCTS SOLD -->
+
+<section class="bg-white border p-6 mb-6">
+
+    <div
+    class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-5">
+
+        <div>
+
+            <h2 class="text-xl">
+                Products Sold
+            </h2>
+
+            <p class="text-sm text-gray-400 mt-1">
+                Total quantity of each product sold from confirmed paid orders.
+            </p>
+
+        </div>
+
+
+        <div class="flex flex-wrap gap-3">
+
+            <select
+            id="productDateFilter"
+            onchange="render()"
+            class="border p-2 text-sm">
+
+                <option value="today">
+                    Today
+                </option>
+
+                <option value="yesterday">
+                    Yesterday
+                </option>
+
+                <option value="week">
+                    This Week
+                </option>
+
+                <option value="month">
+                    This Month
+                </option>
+
+                <option value="all">
+                    All Time
+                </option>
+
+                <option value="custom">
+                    Custom Date
+                </option>
+
+            </select>
+
+
+            <input
+            type="date"
+            id="customProductDate"
+            onchange="render()"
+            class="border p-2 text-sm hidden">
+
+        </div>
+
+    </div>
+
+
+    <div
+    id="productDateLabel"
+    class="text-sm text-green-900 mb-4">
+
+        Showing today's sales
+
+    </div>
+
+
+    <div
+    id="productsSold"
+    class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+
+    </div>
+
+
+    <div class="border-t mt-6 pt-4">
+
+        <p class="text-xs text-gray-400">
+            TOTAL ITEMS SOLD
+        </p>
+
+        <p
+        id="totalItemsSold"
+        class="text-2xl text-green-900 mt-2">
+
+            0 Items
+
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- DAILY DOWNLOAD REPORT -->
+
+<section class="bg-white border p-6 mb-6">
+
+    <div class="flex flex-col lg:flex-row lg:justify-between lg:items-end gap-5">
+
+        <div>
+            <h2 class="text-xl">Daily Report & Downloads</h2>
+            <p class="text-sm text-gray-400 mt-1">
+                Download sales, receipts and debts for one specific day.
+            </p>
+        </div>
+
+        <div>
+            <label class="text-xs text-gray-500">REPORT DATE</label>
+            <input type="date"
+            id="reportDate"
+            onchange="updateDailyReportPreview()"
+            class="w-full sm:w-auto border p-3 mt-1">
+        </div>
+
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+
+        <div class="border p-4">
+            <p class="text-xs text-gray-400">SALES</p>
+            <p id="dailyReportSales" class="text-xl mt-2">Ksh 0</p>
+        </div>
+
+        <div class="border p-4">
+            <p class="text-xs text-gray-400">RECEIPTS</p>
+            <p id="dailyReportReceipts" class="text-xl mt-2">0</p>
+        </div>
+
+        <div class="border p-4">
+            <p class="text-xs text-gray-400">DEBTS</p>
+            <p id="dailyReportDebts" class="text-xl mt-2">Ksh 0</p>
+        </div>
+
+        <div class="border p-4">
+            <p class="text-xs text-gray-400">DEBT RECORDS</p>
+            <p id="dailyReportDebtCount" class="text-xl mt-2">0</p>
+        </div>
+
+    </div>
+
+    <div class="flex flex-wrap gap-3 mt-6">
+
+        <button onclick="downloadDailySales()"
+        class="bg-black text-white px-4 py-3 hover:bg-gray-800 transition">
+            Download Sales
+        </button>
+
+        <button onclick="downloadDailyReceipts()"
+        class="border px-4 py-3 hover:bg-gray-50 transition">
+            Download Receipts
+        </button>
+
+        <button onclick="downloadDailyDebts()"
+        class="border px-4 py-3 hover:bg-gray-50 transition">
+            Download Debts
+        </button>
+
+        <button onclick="downloadFullDailyReport()"
+        class="border border-green-900 text-green-900 px-4 py-3 hover:bg-green-50 transition">
+            Download Full Daily Report
+        </button>
+
+    </div>
+
+</section>
+
+
+
+<button type="button" onclick="downloadDailyPDF()" class="bg-green-900 text-white px-4 py-2 text-sm hover:bg-green-800">↓ Download PDF Report</button>
+
+<!-- SEARCH -->
+
+<div class="bg-white border p-5 mb-6">
+
+<input
+id="searchReceipt"
+oninput="render()"
+placeholder="Search receipt number, customer, waiter or table..."
+class="w-full border p-3">
+
+</div>
+
+
+<!-- CONTENT -->
+
+<div class="grid lg:grid-cols-2 gap-6">
+
+
+<!-- PAID RECEIPTS -->
+
+<section class="bg-white border p-6">
+
+<h2 class="text-xl">
+Paid Receipts
+</h2>
+
+<p class="text-sm text-gray-400 mt-1 mb-5">
+Confirmed restaurant sales and paid customer debts.
+</p>
+
+
+<div
+id="receipts"
+class="space-y-4">
+</div>
+
+</section>
+
+
+<!-- DEBTS -->
+
+<section class="bg-white border p-6">
+
+<h2 class="text-xl">
+Customer Debts
+</h2>
+
+<p class="text-sm text-gray-400 mt-1 mb-5">
+Pending debts remain here until payment is confirmed.
+</p>
+
+
+<!-- ADD DEBT -->
+
+<form
+id="debtForm"
+class="space-y-3">
+
+
+<input
+id="debtName"
+required
+placeholder="Customer name"
+class="w-full border p-3">
+
+
+<input
+id="debtAmount"
+required
+type="number"
+min="1"
+placeholder="Amount"
+class="w-full border p-3">
+
+
+<input
+id="debtReason"
+placeholder="Reason / order number"
+class="w-full border p-3">
+
+
+<button
+type="submit"
+class="w-full bg-black text-white p-3">
+
+Record Debt
+
+</button>
+
+</form>
+
+
+<!-- DEBT SUMMARY -->
+
+<div class="grid grid-cols-2 gap-4 mt-6 mb-4">
+
+
+<div class="border p-4">
+
+<p class="text-xs text-gray-400">
+PENDING DEBTS
+</p>
+
+<p
+id="pendingDebtCount"
+class="text-xl mt-2">
+
+0
+
+</p>
+
+</div>
+
+
+<div class="border p-4">
+
+<p class="text-xs text-gray-400">
+PAID DEBTS
+</p>
+
+<p
+id="paidDebtCount"
+class="text-xl mt-2">
+
+0
+
+</p>
+
+</div>
+
+
+</div>
+
+
+<!-- DEBT LIST -->
+
+<div
+id="debts"
+class="space-y-2">
+</div>
+
+
+</section>
+
+
+</div>
+
+
+</main>
+
+
+<script>
+
+
+/* =====================================================
+STORAGE KEYS
+===================================================== */
+
+const ORDERS = "serene_orders";
+
+const DEBTS = "serene_debts";
+
+
+let selectedDebtId = null;
+
+
+/* =====================================================
+GET DATA
+===================================================== */
+
+function get(key){
+
+    try{
+
+        return JSON.parse(
+            localStorage.getItem(key) || "[]"
+        );
+
+    }catch(error){
+
+        return [];
+
+    }
+
+}
+
+
+/* =====================================================
+SAVE DATA
+===================================================== */
+
+function save(key,data){
+
+    localStorage.setItem(
+        key,
+        JSON.stringify(data)
+    );
+
+}
+
+
+/* =====================================================
+MONEY
+===================================================== */
+
+function money(n){
+
+    return "Ksh " +
+    Number(n || 0).toLocaleString();
+
+}
+
+
+/* =====================================================
+ESCAPE TEXT
+===================================================== */
+
+function escapeText(text){
+
+    const div =
+    document.createElement("div");
+
+    div.textContent =
+    text || "";
+
+    return div.innerHTML;
+
+}
+
+
+/* =====================================================
+TOAST
+===================================================== */
+
+function showToast(title,message){
+
+    document.getElementById(
+        "toastTitle"
+    ).textContent = title;
+
+
+    document.getElementById(
+        "toastMessage"
+    ).textContent = message;
+
+
+    const toastBox =
+    document.getElementById(
+        "toast"
+    );
+
+
+    toastBox.classList.add(
+        "show"
+    );
+
+
+    clearTimeout(
+        window.toastTimer
+    );
+
+
+    window.toastTimer =
+    setTimeout(function(){
+
+        toastBox.classList.remove(
+            "show"
+        );
+
+    },3000);
+
+}
+
+
+/* =====================================================
+GET ORDER ITEMS
+
+SUPPORTS:
+- order.items
+- order.products
+- old and new dashboards
+===================================================== */
+
+function getOrderItems(order){
+
+    if(
+        Array.isArray(order.products)
+    ){
+
+        return order.products.map(
+            item => ({
+
+                product:
+                item.name ||
+                item.product ||
+                "Product",
+
+
+                category:
+                item.category ||
+                "Uncategorized",
+
+
+                quantity:
+                Number(
+                    item.qty ||
+                    item.quantity ||
+                    0
+                ),
+
+
+                itemTotal:
+                Number(
+                    item.total ||
+                    item.itemTotal ||
+                    (
+                        Number(
+                            item.qty ||
+                            item.quantity ||
+                            0
+                        )
+                        *
+                        Number(
+                            item.price ||
+                            0
+                        )
+                    )
+                )
+
+            })
+        );
+
+    }
+
+
+    if(
+        Array.isArray(order.items)
+    ){
+
+        return order.items.map(
+            item => ({
+
+                product:
+                item.product ||
+                item.name ||
+                "Product",
+
+
+                category:
+                item.category ||
+                "Uncategorized",
+
+
+                quantity:
+                Number(
+                    item.quantity ||
+                    item.qty ||
+                    0
+                ),
+
+
+                itemTotal:
+                Number(
+                    item.itemTotal ||
+                    item.total ||
+                    (
+                        Number(
+                            item.quantity ||
+                            item.qty ||
+                            0
+                        )
+                        *
+                        Number(
+                            item.price ||
+                            0
+                        )
+                    )
+                )
+
+            })
+        );
+
+    }
+
+
+    return [];
+
+}
+
+
+/* =====================================================
+RECEIPT NUMBER
+===================================================== */
+
+function getReceiptNumber(order){
+
+    return (
+
+        order.receiptNumber ||
+
+        order.orderNumber ||
+
+        "SE-" +
+        String(
+            order.id ||
+            Date.now()
+        ).slice(-7)
+
+    );
+
+}
+
+
+/* =====================================================
+OPEN DEBT PAYMENT
+===================================================== */
+
+function openDebtPayment(id){
+
+    const debts =
+    get(DEBTS);
+
+
+    const debt =
+    debts.find(
+        d => String(d.id) === String(id)
+    );
+
+
+    if(!debt){
+
+        return;
+
+    }
+
+
+    selectedDebtId =
+    String(id);
+
+
+    document.getElementById(
+        "paymentCustomer"
+    ).textContent =
+    "Customer: " +
+    debt.name;
+
+
+    document.getElementById(
+        "paymentAmount"
+    ).textContent =
+    money(debt.amount);
+
+
+    document.getElementById(
+        "debtPaymentMethod"
+    ).value = "";
+
+
+    document.getElementById(
+        "paymentModal"
+    ).classList.remove(
+        "hidden"
+    );
+
+}
+
+
+/* =====================================================
+CLOSE PAYMENT MODAL
+===================================================== */
+
+function closePaymentModal(){
+
+    selectedDebtId = null;
+
+
+    document.getElementById(
+        "paymentModal"
+    ).classList.add(
+        "hidden"
+    );
+
+}
+
+
+/* =====================================================
+CONFIRM DEBT PAYMENT
+===================================================== */
+
+function confirmDebtPayment(){
+
+    const method =
+    document.getElementById(
+        "debtPaymentMethod"
+    ).value;
+
+
+    if(!method){
+
+        showToast(
+            "Payment method required",
+            "Please select Cash or Pochi."
+        );
+
+        return;
+
+    }
+
+
+    const debts =
+    get(DEBTS);
+
+
+    const debtIndex =
+    debts.findIndex(
+        d =>
+        String(d.id) ===
+        String(selectedDebtId)
+    );
+
+
+    if(
+        debtIndex === -1
+    ){
+
+        closePaymentModal();
+
+        return;
+
+    }
+
+
+    const date =
+    new Date();
+
+
+    /* UPDATE DEBT */
+
+    debts[debtIndex].status =
+    "Paid";
+
+
+    debts[debtIndex].paymentMethod =
+    method;
+
+
+    debts[debtIndex].paidDate =
+    date.toLocaleDateString();
+
+
+    debts[debtIndex].paidTime =
+    date.toLocaleTimeString();
+
+
+    debts[debtIndex].paidAt =
+    date.toISOString();
+
+
+    debts[debtIndex].receiptNumber =
+    "DEBT-" +
+    String(Date.now()).slice(-7);
+
+
+    save(
+        DEBTS,
+        debts
+    );
+
+
+    const paidAmount =
+    debts[debtIndex].amount;
+
+
+    closePaymentModal();
+
+
+    render();
+
+
+    showToast(
+        "Debt payment confirmed",
+        money(paidAmount) +
+        " received via " +
+        method
+    );
+
+}
+
+
+/* =====================================================
+PAID DEBT RECEIPT HTML
+===================================================== */
+
+function debtReceiptHTML(debt){
+
+    return `
+
+    <div class="border p-5">
+
+
+        <div class="flex justify-between gap-4">
+
+
+            <div>
+
+                <div class="text-black">
+
+                    ${escapeText(
+                        debt.receiptNumber ||
+                        "DEBT-" +
+                        String(
+                            debt.id
+                        ).slice(-7)
+                    )}
+
+                </div>
+
+
+                <div class="text-sm text-gray-500 mt-1">
+
+                    Paid Customer Debt
+
+                </div>
+
+            </div>
+
+
+            <div class="text-right">
+
+                <div>
+
+                    ${money(
+                        debt.amount
+                    )}
+
+                </div>
+
+
+                <div class="text-xs text-green-900 mt-1">
+
+                    ${escapeText(
+                        debt.paymentMethod ||
+                        ""
+                    )}
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="mt-4 text-sm">
+
+
+            <div class="flex justify-between gap-4 border-b py-2">
+
+                <span>
+                    Customer
+                </span>
+
+
+                <span class="text-right">
+
+                    ${escapeText(
+                        debt.name
+                    )}
+
+                </span>
+
+            </div>
+
+
+            <div class="flex justify-between gap-4 border-b py-2">
+
+                <span>
+                    Reason
+                </span>
+
+
+                <span class="text-right">
+
+                    ${escapeText(
+                        debt.reason ||
+                        "Customer debt"
+                    )}
+
+                </span>
+
+            </div>
+
+
+            <div class="flex justify-between gap-4 border-b py-2">
+
+                <span>
+                    Debt Date
+                </span>
+
+
+                <span class="text-right">
+
+                    ${escapeText(
+                        debt.date ||
+                        "Not recorded"
+                    )}
+
+                </span>
+
+            </div>
+
+
+            <div class="flex justify-between gap-4 border-b py-2">
+
+                <span>
+                    Debt Time
+                </span>
+
+
+                <span class="text-right">
+
+                    ${escapeText(
+                        debt.time ||
+                        "Not recorded"
+                    )}
+
+                </span>
+
+            </div>
+
+
+            <div class="flex justify-between gap-4 border-b py-2">
+
+                <span>
+                    Payment Date
+                </span>
+
+
+                <span class="text-right">
+
+                    ${escapeText(
+                        debt.paidDate ||
+                        "Not recorded"
+                    )}
+
+                </span>
+
+            </div>
+
+
+            <div class="flex justify-between gap-4 border-b py-2">
+
+                <span>
+                    Payment Time
+                </span>
+
+
+                <span class="text-right">
+
+                    ${escapeText(
+                        debt.paidTime ||
+                        "Not recorded"
+                    )}
+
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="mt-4 p-3 border">
+
+
+            <p class="text-xs text-gray-400">
+
+                PAYMENT CONFIRMED
+
+            </p>
+
+
+            <p class="text-sm mt-1">
+
+                ${escapeText(
+                    debt.paidDate ||
+                    ""
+                )}
+
+                at
+
+                ${escapeText(
+                    debt.paidTime ||
+                    ""
+                )}
+
+            </p>
+
+
+        </div>
+
+
+        <div class="mt-4 text-xs text-green-900">
+
+            DEBT RECEIPT — PAID
+
+        </div>
+
+
+    </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+NORMAL PAID ORDER RECEIPT HTML
+===================================================== */
+
+function orderReceiptHTML(order){
+
+    const items =
+    getOrderItems(order);
+
+
+    const receiptNumber =
+    getReceiptNumber(order);
+
+
+    return `
+
+    <div class="border p-5">
+
+
+        <div class="flex justify-between gap-4">
+
+
+            <div>
+
+                <div class="text-black">
+
+                    ${escapeText(
+                        receiptNumber
+                    )}
+
+                </div>
+
+
+                <div class="text-sm text-gray-500 mt-1">
+
+                    Waiter:
+
+                    ${escapeText(
+                        order.waiter ||
+                        "Not recorded"
+                    )}
+
+                    ·
+
+                    Table:
+
+                    ${escapeText(
+                        order.table ||
+                        "Not recorded"
+                    )}
+
+                </div>
+
+            </div>
+
+
+            <div class="text-right">
+
+                <div>
+
+                    ${money(
+                        order.total
+                    )}
+
+                </div>
+
+
+                <div class="text-xs text-green-900 mt-1">
+
+                    ${escapeText(
+                        order.paymentMethod ||
+                        "Paid"
+                    )}
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="mt-4 text-sm">
+
+
+            ${items.map(
+                item => `
+
+                <div class="flex justify-between gap-4 border-b py-2">
+
+
+                    <span>
+
+                        ${escapeText(
+                            item.product
+                        )}
+
+
+                        <span class="text-gray-400">
+
+                            (
+                            ${escapeText(
+                                item.category
+                            )}
+                            )
+
+                        </span>
+
+
+                        × ${item.quantity}
+
+                    </span>
+
+
+                    <span>
+
+                        ${money(
+                            item.itemTotal
+                        )}
+
+                    </span>
+
+
+                </div>
+
+                `
+            ).join("")}
+
+
+        </div>
+
+
+        <div class="text-xs text-gray-400 mt-4">
+
+            Ordered:
+
+            ${escapeText(
+                order.date ||
+                order.createdDate ||
+                ""
+            )}
+
+            ${escapeText(
+                order.time ||
+                order.createdTime ||
+                ""
+            )}
+
+            <br>
+
+
+            Paid:
+
+            ${escapeText(
+                order.paidDate ||
+                ""
+            )}
+
+            ${escapeText(
+                order.paidTime ||
+                ""
+            )}
+
+        </div>
+
+
+        <div class="mt-4 text-xs text-green-900">
+
+            RESTAURANT RECEIPT — PAID
+
+        </div>
+
+
+    </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+RENDER DASHBOARD
+===================================================== */
+
+function localDateKey(date){
+
+    const d = date instanceof Date ? date : new Date(date);
+    if(isNaN(d.getTime())) return "";
+
+    return d.getFullYear() + "-" +
+        String(d.getMonth() + 1).padStart(2,"0") + "-" +
+        String(d.getDate()).padStart(2,"0");
+
+}
+
+
+function orderDateTime(order){
+
+    const value =
+        order.paidAt ||
+        order.createdAt ||
+        order.orderAt ||
+        order.timestamp;
+
+    if(value){
+        const d = new Date(value);
+        if(!isNaN(d.getTime())) return d;
+    }
+
+    if(order.paidDate || order.paidTime){
+        const d = new Date(
+            String(order.paidDate || "") + " " +
+            String(order.paidTime || "")
+        );
+        if(!isNaN(d.getTime())) return d;
+    }
+
+    if(order.date || order.time){
+        const d = new Date(
+            String(order.date || "") + " " +
+            String(order.time || "")
+        );
+        if(!isNaN(d.getTime())) return d;
+    }
+
+    return null;
+
+}
+
+
+function debtDateTime(debt){
+
+    const value =
+        debt.createdAt ||
+        debt.timestamp;
+
+    if(value){
+        const d = new Date(value);
+        if(!isNaN(d.getTime())) return d;
+    }
+
+    if(debt.date || debt.time){
+        const d = new Date(
+            String(debt.date || "") + " " +
+            String(debt.time || "")
+        );
+        if(!isNaN(d.getTime())) return d;
+    }
+
+    return null;
+
+}
+
+
+function selectedReportDate(){
+
+    const input = document.getElementById("reportDate");
+    return input ? input.value : "";
+
+}
+
+
+function dailyReportData(){
+
+    const selectedDate = selectedReportDate();
+
+    const orders = get(ORDERS).filter(order =>
+        String(order.status).toLowerCase() === "paid"
+    );
+
+    const debts = get(DEBTS);
+
+    const dayOrders = orders.filter(order => {
+        const d = orderDateTime(order);
+        return d && localDateKey(d) === selectedDate;
+    });
+
+    const dayDebts = debts.filter(debt => {
+        const d = debtDateTime(debt);
+        return d && localDateKey(d) === selectedDate;
+    });
+
+    const sales = dayOrders.reduce((sum, order) =>
+        sum + Number(order.total || 0), 0);
+
+    const cash = dayOrders
+        .filter(order => String(order.paymentMethod).toLowerCase() === "cash")
+        .reduce((sum, order) => sum + Number(order.total || 0), 0);
+
+    const pochi = dayOrders
+        .filter(order => String(order.paymentMethod).toLowerCase() === "pochi")
+        .reduce((sum, order) => sum + Number(order.total || 0), 0);
+
+    const debtAmount = dayDebts.reduce((sum, debt) =>
+        sum + Number(debt.amount || 0), 0);
+
+    const pendingDebts = dayDebts.filter(debt =>
+        String(debt.status).toLowerCase() === "pending"
+    );
+
+    const paidDebts = dayDebts.filter(debt =>
+        String(debt.status).toLowerCase() === "paid"
+    );
+
+    const pendingDebtAmount = pendingDebts.reduce((sum, debt) =>
+        sum + Number(debt.amount || 0), 0);
+
+    const paidDebtAmount = paidDebts.reduce((sum, debt) =>
+        sum + Number(debt.amount || 0), 0);
+
+    return {
+        selectedDate,
+        orders: dayOrders,
+        debts: dayDebts,
+        sales,
+        cash,
+        pochi,
+        debtAmount,
+        pendingDebtAmount,
+        paidDebtAmount
+    };
+
+}
+
+
+function csvCell(value){
+
+    const text = value === null || value === undefined ? "" : String(value);
+    return '"' + text.replace(/"/g,'""') + '"';
+
+}
+
+
+function downloadCSV(filename, rows){
+
+    const csv = "\ufeff" + rows.map(row =>
+        row.map(csvCell).join(",")
+    ).join("\r\n");
+
+    const blob = new Blob([csv], {
+        type:"text/csv;charset=utf-8;"
+    });
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    setTimeout(() => URL.revokeObjectURL(url),1000);
+
+}
+
+
+function reportFilename(type,date){
+
+    return "Serene-Eatery-" + type + "-" +
+        (date || "report") + ".csv";
+
+}
+
+
+function updateDailyReportPreview(){
+
+    const data = dailyReportData();
+
+    document.getElementById("dailyReportSales").textContent =
+        money(data.sales);
+
+    document.getElementById("dailyReportReceipts").textContent =
+        data.orders.length;
+
+    document.getElementById("dailyReportDebts").textContent =
+        money(data.debtAmount);
+
+    document.getElementById("dailyReportDebtCount").textContent =
+        data.debts.length;
+
+}
+
+
+function downloadDailySales(){
+
+    const data = dailyReportData();
+
+    const rows = [
+        ["SERENE EATERY - DAILY SALES"],
+        ["Date", data.selectedDate],
+        [],
+        ["SUMMARY"],
+        ["Total Sales", data.sales],
+        ["Receipts", data.orders.length],
+        ["Cash Sales", data.cash],
+        ["Pochi Sales", data.pochi],
+        [],
+        ["RECEIPTS"],
+        ["Receipt Number","Time","Waiter","Table","Payment Method","Amount"]
+    ];
+
+    data.orders.forEach(order => {
+        const d = orderDateTime(order);
+        rows.push([
+            getReceiptNumber(order),
+            d ? d.toLocaleTimeString() : (order.time || ""),
+            order.waiter || "",
+            order.table || "",
+            order.paymentMethod || "",
+            Number(order.total || 0)
+        ]);
+    });
+
+    downloadCSV(reportFilename("Sales",data.selectedDate),rows);
+
+}
+
+
+function downloadDailyReceipts(){
+
+    const data = dailyReportData();
+
+    const rows = [
+        ["SERENE EATERY - DAILY RECEIPTS"],
+        ["Date",data.selectedDate],
+        [],
+        ["Receipt Number","Date","Time","Waiter","Table","Payment Method","Amount"]
+    ];
+
+    data.orders.forEach(order => {
+        const d = orderDateTime(order);
+        rows.push([
+            getReceiptNumber(order),
+            d ? localDateKey(d) : (order.date || ""),
+            d ? d.toLocaleTimeString() : (order.time || ""),
+            order.waiter || "",
+            order.table || "",
+            order.paymentMethod || "",
+            Number(order.total || 0)
+        ]);
+    });
+
+    downloadCSV(reportFilename("Receipts",data.selectedDate),rows);
+
+}
+
+
+function downloadDailyDebts(){
+
+    const data = dailyReportData();
+
+    const rows = [
+        ["SERENE EATERY - DAILY DEBTS"],
+        ["Date",data.selectedDate],
+        [],
+        ["Customer","Amount","Reason","Debt Date","Debt Time","Status","Payment Method","Paid Date","Paid Time","Receipt Number"]
+    ];
+
+    data.debts.forEach(debt => {
+        rows.push([
+            debt.name || "",
+            Number(debt.amount || 0),
+            debt.reason || "",
+            debt.date || "",
+            debt.time || "",
+            debt.status || "",
+            debt.paymentMethod || "",
+            debt.paidDate || "",
+            debt.paidTime || "",
+            debt.receiptNumber || ""
+        ]);
+    });
+
+    rows.push([]);
+    rows.push(["TOTAL DEBT RECORDS",data.debts.length]);
+    rows.push(["TOTAL DEBT AMOUNT",data.debtAmount]);
+    rows.push(["PENDING DEBT",data.pendingDebtAmount]);
+    rows.push(["PAID DEBT",data.paidDebtAmount]);
+
+    downloadCSV(reportFilename("Debts",data.selectedDate),rows);
+
+}
+
+
+function downloadFullDailyReport(){
+
+    const data = dailyReportData();
+
+    const rows = [
+        ["SERENE EATERY - COMPLETE DAILY REPORT"],
+        ["Date",data.selectedDate],
+        [],
+        ["DAILY SUMMARY"],
+        ["Total Sales",data.sales],
+        ["Receipts",data.orders.length],
+        ["Cash Sales",data.cash],
+        ["Pochi Sales",data.pochi],
+        ["Debt Records",data.debts.length],
+        ["Total Debts",data.debtAmount],
+        ["Pending Debts",data.pendingDebtAmount],
+        ["Paid Debts",data.paidDebtAmount],
+        [],
+        ["PRODUCTS SOLD"],
+        ["Product","Category","Quantity"]
+    ];
+
+    const products = {};
+
+    data.orders.forEach(order => {
+        getOrderItems(order).forEach(item => {
+            const key = String(item.product || "Unknown Product").trim().toLowerCase();
+            if(!products[key]){
+                products[key] = {
+                    product: String(item.product || "Unknown Product").trim(),
+                    category: item.category || "Uncategorized",
+                    quantity: 0
+                };
+            }
+            products[key].quantity += Number(item.quantity || 0);
+        });
+    });
+
+    Object.values(products)
+    .sort((a,b) => b.quantity - a.quantity)
+    .forEach(item => {
+        rows.push([item.product,item.category,item.quantity]);
+    });
+
+    rows.push([]);
+    rows.push(["RECEIPTS"]);
+    rows.push(["Receipt Number","Date","Time","Waiter","Table","Payment Method","Amount"]);
+
+    data.orders.forEach(order => {
+        const d = orderDateTime(order);
+        rows.push([
+            getReceiptNumber(order),
+            d ? localDateKey(d) : (order.date || ""),
+            d ? d.toLocaleTimeString() : (order.time || ""),
+            order.waiter || "",
+            order.table || "",
+            order.paymentMethod || "",
+            Number(order.total || 0)
+        ]);
+    });
+
+    rows.push([]);
+    rows.push(["DEBTS"]);
+    rows.push(["Customer","Amount","Reason","Debt Date","Debt Time","Status","Payment Method","Paid Date","Paid Time","Receipt Number"]);
+
+    data.debts.forEach(debt => {
+        rows.push([
+            debt.name || "",
+            Number(debt.amount || 0),
+            debt.reason || "",
+            debt.date || "",
+            debt.time || "",
+            debt.status || "",
+            debt.paymentMethod || "",
+            debt.paidDate || "",
+            debt.paidTime || "",
+            debt.receiptNumber || ""
+        ]);
+    });
+
+    downloadCSV(reportFilename("Full-Daily-Report",data.selectedDate),rows);
+
+}
+
+
+function render(){
+
+
+    const search =
+    document.getElementById(
+        "searchReceipt"
+    ).value
+    .trim()
+    .toLowerCase();
+
+
+    /* GET PAID ORDERS */
+
+    const orders =
+    get(ORDERS)
+    .filter(
+        order =>
+        String(
+            order.status
+        ).toLowerCase() ===
+        "paid"
+    );
+
+
+    /* =================================================
+    PRODUCT SALES DATE FILTER
+    ================================================= */
+
+    const dateFilter =
+    document.getElementById(
+        "productDateFilter"
+    ).value;
+
+
+    const customDateInput =
+    document.getElementById(
+        "customProductDate"
+    );
+
+
+    /* SHOW OR HIDE CUSTOM DATE */
+
+    if(
+        dateFilter === "custom"
+    ){
+
+        customDateInput.classList.remove(
+            "hidden"
+        );
+
+    }else{
+
+        customDateInput.classList.add(
+            "hidden"
+        );
+
+    }
+
+
+    /* CURRENT DATE BOUNDARIES */
+
+    const now =
+    new Date();
+
+
+    const today =
+    new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate()
+    );
+
+
+    const tomorrow =
+    new Date(today);
+
+    tomorrow.setDate(
+        tomorrow.getDate() + 1
+    );
+
+
+    const yesterday =
+    new Date(today);
+
+    yesterday.setDate(
+        yesterday.getDate() - 1
+    );
+
+
+    /* START OF WEEK (MONDAY) */
+
+    const startOfWeek =
+    new Date(today);
+
+
+    const day =
+    startOfWeek.getDay();
+
+
+    const daysSinceMonday =
+    day === 0
+    ? 6
+    : day - 1;
+
+
+    startOfWeek.setDate(
+        startOfWeek.getDate() -
+        daysSinceMonday
+    );
+
+
+    /* START OF MONTH */
+
+    const startOfMonth =
+    new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        1
+    );
+
+
+    /* PRODUCT DATE LABEL */
+
+    let productDateLabel =
+    "Showing all-time sales";
+
+
+    if(
+        dateFilter === "today"
+    ){
+
+        productDateLabel =
+        "Showing today's sales";
+
+    }
+
+
+    else if(
+        dateFilter === "yesterday"
+    ){
+
+        productDateLabel =
+        "Showing yesterday's sales";
+
+    }
+
+
+    else if(
+        dateFilter === "week"
+    ){
+
+        productDateLabel =
+        "Showing this week's sales";
+
+    }
+
+
+    else if(
+        dateFilter === "month"
+    ){
+
+        productDateLabel =
+        "Showing this month's sales";
+
+    }
+
+
+    else if(
+        dateFilter === "custom"
+    ){
+
+        productDateLabel =
+        customDateInput.value
+        ? "Showing sales for " +
+          customDateInput.value
+        : "Select a custom date";
+
+    }
+
+
+    document.getElementById(
+        "productDateLabel"
+    ).textContent =
+    productDateLabel;
+
+
+    /* =================================================
+    FILTER PAID ORDERS BY DATE
+    ================================================= */
+
+    const filteredProductOrders =
+    orders.filter(
+        order => {
+
+
+            /* Prefer payment date for paid sales */
+
+            const orderDateValue =
+
+            order.paidAt ||
+
+            order.createdAt ||
+
+            order.orderAt ||
+
+            order.timestamp ||
+
+            order.date;
+
+
+            /* All-time sales include orders even when
+               an old record has no usable timestamp */
+
+            if(
+                dateFilter === "all"
+            ){
+
+                return true;
+
+            }
+
+
+            if(
+                !orderDateValue
+            ){
+
+                return false;
+
+            }
+
+
+            const orderDate =
+            new Date(
+                orderDateValue
+            );
+
+
+            if(
+                isNaN(
+                    orderDate.getTime()
+                )
+            ){
+
+                return false;
+
+            }
+
+
+            /* TODAY */
+
+            if(
+                dateFilter === "today"
+            ){
+
+                return (
+
+                    orderDate >= today &&
+
+                    orderDate < tomorrow
+
+                );
+
+            }
+
+
+            /* YESTERDAY */
+
+            if(
+                dateFilter ===
+                "yesterday"
+            ){
+
+                return (
+
+                    orderDate >= yesterday &&
+
+                    orderDate < today
+
+                );
+
+            }
+
+
+            /* THIS WEEK */
+
+            if(
+                dateFilter === "week"
+            ){
+
+                return (
+
+                    orderDate >=
+                    startOfWeek &&
+
+                    orderDate < tomorrow
+
+                );
+
+            }
+
+
+            /* THIS MONTH */
+
+            if(
+                dateFilter === "month"
+            ){
+
+                return (
+
+                    orderDate >=
+                    startOfMonth &&
+
+                    orderDate < tomorrow
+
+                );
+
+            }
+
+
+            /* CUSTOM DATE */
+
+            if(
+                dateFilter ===
+                "custom"
+            ){
+
+                if(
+                    !customDateInput.value
+                ){
+
+                    return false;
+
+                }
+
+
+                const customDate =
+                new Date(
+                    customDateInput.value +
+                    "T00:00:00"
+                );
+
+
+                const customDateEnd =
+                new Date(
+                    customDate
+                );
+
+
+                customDateEnd.setDate(
+                    customDateEnd.getDate() +
+                    1
+                );
+
+
+                return (
+
+                    orderDate >=
+                    customDate &&
+
+                    orderDate <
+                    customDateEnd
+
+                );
+
+            }
+
+
+            return true;
+
+        }
+    );
+
+
+    /* =================================================
+    CALCULATE PRODUCTS SOLD
+    ================================================= */
+
+    const productsSold = {};
+
+
+    filteredProductOrders.forEach(
+        order => {
+
+
+            const items =
+            getOrderItems(
+                order
+            );
+
+
+            items.forEach(
+                item => {
+
+
+                    const product =
+                    item.product ||
+                    "Unknown Product";
+
+
+                    const category =
+                    item.category ||
+                    "Uncategorized";
+
+
+                    /* Case-insensitive grouping so
+                       Mandazi and mandazi are not split */
+
+                    const productKey =
+                    String(
+                        product
+                    )
+                    .trim()
+                    .toLowerCase();
+
+
+                    if(
+                        !productsSold[
+                            productKey
+                        ]
+                    ){
+
+                        productsSold[
+                            productKey
+                        ] = {
+
+                            product:
+                            String(product).trim(),
+
+                            quantity: 0,
+
+                            category:
+                            category
+
+                        };
+
+                    }
+
+
+                    productsSold[
+                        productKey
+                    ].quantity +=
+
+                    Number(
+                        item.quantity || 0
+                    );
+
+
+                }
+            );
+
+
+        }
+    );
+
+
+    /* TOTAL ITEMS SOLD */
+
+    const totalItemsSold =
+    Object.values(
+        productsSold
+    )
+    .reduce(
+        (sum,item) =>
+
+        sum +
+
+        Number(
+            item.quantity || 0
+        ),
+
+        0
+    );
+
+
+    document.getElementById(
+        "totalItemsSold"
+    ).textContent =
+
+    totalItemsSold +
+
+    " " +
+
+    (
+        totalItemsSold === 1
+        ? "Item"
+        : "Items"
+    );
+
+
+    /* SORT BEST-SELLING PRODUCT FIRST */
+
+    const sortedProducts =
+    Object.values(
+        productsSold
+    )
+    .sort(
+        (a,b) =>
+
+        b.quantity -
+
+        a.quantity
+    );
+
+
+    /* RENDER PRODUCTS SOLD */
+
+    const productsSoldBox =
+    document.getElementById(
+        "productsSold"
+    );
+
+
+    productsSoldBox.innerHTML = "";
+
+
+    sortedProducts.forEach(
+        item => {
+
+
+            productsSoldBox.innerHTML += `
+
+            <div class="border p-4">
+
+                <p class="text-xs text-gray-400">
+
+                    ${escapeText(
+                        item.category
+                    )}
+
+                </p>
+
+
+                <p class="mt-2">
+
+                    ${escapeText(
+                        item.product
+                    )}
+
+                </p>
+
+
+                <p
+                class="text-3xl mt-3 text-green-900">
+
+                    ${item.quantity}
+
+                </p>
+
+
+                <p
+                class="text-xs text-gray-400 mt-1">
+
+                    SOLD
+
+                </p>
+
+            </div>
+
+            `;
+
+
+        }
+    );
+
+
+    if(
+        !sortedProducts.length
+    ){
+
+        productsSoldBox.innerHTML =
+
+        `<p
+        class="text-gray-400 col-span-full">
+
+            No products were sold during
+            this period.
+
+        </p>`;
+
+    }
+
+
+
+
+    /* GET DEBTS */
+
+    const debtsData =
+    get(DEBTS);
+
+
+    const paidDebts =
+    debtsData.filter(
+        debt =>
+        String(
+            debt.status
+        ).toLowerCase() ===
+        "paid"
+    );
+
+
+    const pendingDebts =
+    debtsData.filter(
+        debt =>
+        String(
+            debt.status
+        ).toLowerCase() ===
+        "pending"
+    );
+
+
+    /* RESTAURANT SALES */
+
+    const restaurantSales =
+    orders.reduce(
+        (sum,order) =>
+
+        sum +
+        Number(
+            order.total ||
+            0
+        ),
+
+        0
+    );
+
+
+    /* PAID DEBTS */
+
+    const paidDebtAmount =
+    paidDebts.reduce(
+        (sum,debt) =>
+
+        sum +
+        Number(
+            debt.amount ||
+            0
+        ),
+
+        0
+    );
+
+
+    /* TOTAL RECEIVED */
+
+    const totalReceived =
+    restaurantSales +
+    paidDebtAmount;
+
+
+    /* CASH SALES */
+
+    const cashSales =
+    orders
+    .filter(
+        order =>
+        String(
+            order.paymentMethod
+        ).toLowerCase() ===
+        "cash"
+    )
+    .reduce(
+        (sum,order) =>
+
+        sum +
+        Number(
+            order.total ||
+            0
+        ),
+
+        0
+    );
+
+
+    /* CASH DEBTS */
+
+    const cashDebt =
+    paidDebts
+    .filter(
+        debt =>
+        String(
+            debt.paymentMethod
+        ).toLowerCase() ===
+        "cash"
+    )
+    .reduce(
+        (sum,debt) =>
+
+        sum +
+        Number(
+            debt.amount ||
+            0
+        ),
+
+        0
+    );
+
+
+    /* POCHI SALES */
+
+    const pochiSales =
+    orders
+    .filter(
+        order =>
+        String(
+            order.paymentMethod
+        ).toLowerCase() ===
+        "pochi"
+    )
+    .reduce(
+        (sum,order) =>
+
+        sum +
+        Number(
+            order.total ||
+            0
+        ),
+
+        0
+    );
+
+
+    /* POCHI DEBTS */
+
+    const pochiDebt =
+    paidDebts
+    .filter(
+        debt =>
+        String(
+            debt.paymentMethod
+        ).toLowerCase() ===
+        "pochi"
+    )
+    .reduce(
+        (sum,debt) =>
+
+        sum +
+        Number(
+            debt.amount ||
+            0
+        ),
+
+        0
+    );
+
+
+    /* PENDING TOTAL */
+
+    const pendingTotal =
+    pendingDebts.reduce(
+        (sum,debt) =>
+
+        sum +
+        Number(
+            debt.amount ||
+            0
+        ),
+
+        0
+    );
+
+
+    /* UPDATE SUMMARY */
+
+    document.getElementById(
+        "receiptCount"
+    ).textContent =
+
+    orders.length +
+    paidDebts.length;
+
+
+    document.getElementById(
+        "receiptSales"
+    ).textContent =
+    money(
+        totalReceived
+    );
+
+
+    document.getElementById(
+        "receiptCash"
+    ).textContent =
+    money(
+        cashSales +
+        cashDebt
+    );
+
+
+    document.getElementById(
+        "receiptPochi"
+    ).textContent =
+    money(
+        pochiSales +
+        pochiDebt
+    );
+
+
+    document.getElementById(
+        "debtTotal"
+    ).textContent =
+    money(
+        pendingTotal
+    );
+
+
+    document.getElementById(
+        "pendingDebtCount"
+    ).textContent =
+    pendingDebts.length;
+
+
+    document.getElementById(
+        "paidDebtCount"
+    ).textContent =
+    paidDebts.length;
+
+
+    /* =================================================
+    COMBINE PAID RECEIPTS
+    ================================================= */
+
+    const allPaidReceipts =
+    [
+
+        ...orders.map(
+            order => ({
+
+                type:
+                "order",
+
+                data:
+                order,
+
+                date:
+
+                order.paidAt ||
+
+                order.createdAt ||
+
+                new Date().toISOString()
+
+            })
+        ),
+
+
+        ...paidDebts.map(
+            debt => ({
+
+                type:
+                "debt",
+
+                data:
+                debt,
+
+                date:
+
+                debt.paidAt ||
+
+                new Date().toISOString()
+
+            })
+        )
+
+    ];
+
+
+    /* FILTER */
+
+    const filteredReceipts =
+    allPaidReceipts
+    .filter(
+        receipt => {
+
+
+            const data =
+            receipt.data;
+
+
+            let text = "";
+
+
+            if(
+                receipt.type ===
+                "order"
+            ){
+
+                text =
+
+                [
+
+                    getReceiptNumber(
+                        data
+                    ),
+
+                    data.waiter,
+
+                    data.table,
+
+                    data.paymentMethod
+
+                ]
+
+                .join(" ")
+
+                .toLowerCase();
+
+
+            }else{
+
+
+                text =
+
+                [
+
+                    data.receiptNumber,
+
+                    data.name,
+
+                    data.reason,
+
+                    data.paymentMethod
+
+                ]
+
+                .join(" ")
+
+                .toLowerCase();
+
+            }
+
+
+            return (
+
+                !search ||
+
+                text.includes(
+                    search
+                )
+
+            );
+
+
+        }
+    )
+
+
+    .sort(
+        (a,b) =>
+
+        new Date(
+            b.date
+        )
+
+        -
+
+        new Date(
+            a.date
+        )
+    );
+
+
+    /* RENDER PAID RECEIPTS */
+
+    const receiptsBox =
+    document.getElementById(
+        "receipts"
+    );
+
+
+    receiptsBox.innerHTML = "";
+
+
+    filteredReceipts.forEach(
+        receipt => {
+
+
+            if(
+                receipt.type ===
+                "order"
+            ){
+
+                receiptsBox.innerHTML +=
+
+                orderReceiptHTML(
+                    receipt.data
+                );
+
+
+            }else{
+
+
+                receiptsBox.innerHTML +=
+
+                debtReceiptHTML(
+                    receipt.data
+                );
+
+            }
+
+
+        }
+    );
+
+
+    if(
+        !filteredReceipts.length
+    ){
+
+        receiptsBox.innerHTML =
+
+        '<p class="text-gray-400">No paid receipts found.</p>';
+
+    }
+
+
+    /* =================================================
+    PENDING DEBTS
+    ================================================= */
+
+    const filteredDebts =
+    pendingDebts
+    .filter(
+        debt => {
+
+
+            const text =
+
+            [
+
+                debt.name,
+
+                debt.reason
+
+            ]
+
+            .join(" ")
+
+            .toLowerCase();
+
+
+            return (
+
+                !search ||
+
+                text.includes(
+                    search
+                )
+
+            );
+
+
+        }
+    );
+
+
+    const debtsBox =
+    document.getElementById(
+        "debts"
+    );
+
+
+    debtsBox.innerHTML = "";
+
+
+    filteredDebts
+    .slice()
+    .reverse()
+    .forEach(
+        debt => {
+
+
+            debtsBox.innerHTML += `
+
+            <div class="border p-4 flex justify-between gap-4">
+
+
+                <div>
+
+
+                    <div>
+
+                        ${escapeText(
+                            debt.name
+                        )}
+
+                    </div>
+
+
+                    <div
+                    class="text-xs text-gray-400 mt-1">
+
+                        ${escapeText(
+                            debt.reason ||
+                            "No reason recorded"
+                        )}
+
+                    </div>
+
+
+                    <div
+                    class="text-xs text-gray-400 mt-2">
+
+                        Recorded:
+
+                        ${escapeText(
+                            debt.date ||
+                            ""
+                        )}
+
+                        at
+
+                        ${escapeText(
+                            debt.time ||
+                            ""
+                        )}
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="text-right">
+
+
+                    <div>
+
+                        ${money(
+                            debt.amount
+                        )}
+
+                    </div>
+
+
+                    <div
+                    class="text-xs text-orange-700 mt-1">
+
+                        PENDING
+
+                    </div>
+
+
+                    <button
+                    onclick="openDebtPayment('${debt.id}')"
+                    class="border px-3 py-2 text-xs mt-3 hover:bg-gray-50 transition">
+
+                        Pay Debt
+
+                    </button>
+
+
+                </div>
+
+
+            </div>
+
+            `;
+
+
+        }
+    );
+
+
+    if(
+        !filteredDebts.length
+    ){
+
+        debtsBox.innerHTML =
+
+        '<p class="text-gray-400">No pending debts.</p>';
+
+    }
+
+
+    updateDailyReportPreview();
+
+}
+
+
+/* =====================================================
+ADD DEBT
+===================================================== */
+
+document.getElementById(
+    "debtForm"
+).onsubmit =
+function(e){
+
+    e.preventDefault();
+
+
+    const name =
+    document.getElementById(
+        "debtName"
+    ).value.trim();
+
+
+    const amount =
+    Number(
+        document.getElementById(
+            "debtAmount"
+        ).value
+    );
+
+
+    const reason =
+    document.getElementById(
+        "debtReason"
+    ).value.trim();
+
+
+    if(
+        !name ||
+        amount <= 0
+    ){
+
+        showToast(
+            "Invalid debt",
+            "Enter a customer name and valid amount."
+        );
+
+        return;
+
+    }
+
+
+    const debts =
+    get(DEBTS);
+
+
+    const date =
+    new Date();
+
+
+    debts.push({
+
+        id:
+        String(
+            Date.now()
+        ),
+
+        name:
+        name,
+
+        amount:
+        amount,
+
+        reason:
+        reason,
+
+        status:
+        "Pending",
+
+        date:
+        date.toLocaleDateString(),
+
+        time:
+        date.toLocaleTimeString(),
+
+        createdAt:
+        date.toISOString()
+
+    });
+
+
+    save(
+        DEBTS,
+        debts
+    );
+
+
+    document.getElementById(
+        "debtForm"
+    ).reset();
+
+
+    render();
+
+
+    showToast(
+        "Debt recorded",
+        "The debt is now pending payment."
+    );
+
+};
+
+
+/* =====================================================
+LISTEN FOR OTHER DASHBOARDS
+
+Updates when cashier changes orders
+===================================================== */
+
+window.addEventListener(
+    "storage",
+    function(event){
+
+        if(
+
+            event.key === ORDERS ||
+
+            event.key === DEBTS
+
+        ){
+
+            render();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+CLOSE MODAL ON BACKGROUND CLICK
+===================================================== */
+
+document.getElementById(
+    "paymentModal"
+).addEventListener(
+    "click",
+    function(e){
+
+        if(
+            e.target ===
+            this
+        ){
+
+            closePaymentModal();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+INITIAL REPORT DATE
+===================================================== */
+
+const reportDateInput = document.getElementById("reportDate");
+
+if(reportDateInput){
+    reportDateInput.value = localDateKey(new Date());
+}
+
+
+/* =====================================================
+INITIAL RENDER
+===================================================== */
+
+render();
+
+updateDailyReportPreview();
+
+
+/* =====================================================
+AUTO REFRESH
+===================================================== */
+
+setInterval(
+    render,
+    2000
+);
+
+
+
+/* =================================================
+DAILY PDF REPORT
+Separate reporting function: it does not change the
+normal receipt list or its current filters.
+================================================= */
+function downloadDailyPDF() {
+    if (!window.jspdf || !window.jspdf.jsPDF) {
+        alert("PDF library could not be loaded. Connect to the internet and try again.");
+        return;
+    }
+
+    const filterEl = document.getElementById("productDateFilter");
+    const customEl = document.getElementById("customProductDate");
+    const selectedFilter = filterEl ? filterEl.value : "today";
+    const selectedCustomDate = customEl ? customEl.value : "";
+
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate()+1);
+    const yesterday = new Date(today); yesterday.setDate(yesterday.getDate()-1);
+    const startOfWeek = new Date(today);
+    const day = startOfWeek.getDay();
+    startOfWeek.setDate(startOfWeek.getDate() - (day === 0 ? 6 : day-1));
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+    const parseDate = order => {
+        const v = order.paidAt || order.createdAt || order.orderAt || order.timestamp || order.date;
+        if (!v) return null;
+        const d = new Date(v);
+        return isNaN(d.getTime()) ? null : d;
+    };
+
+    const matches = d => {
+        if (selectedFilter === "all") return true;
+        if (!d) return false;
+        if (selectedFilter === "today") return d >= today && d < tomorrow;
+        if (selectedFilter === "yesterday") return d >= yesterday && d < today;
+        if (selectedFilter === "week") return d >= startOfWeek && d < tomorrow;
+        if (selectedFilter === "month") return d >= startOfMonth && d < tomorrow;
+        if (selectedFilter === "custom") {
+            if (!selectedCustomDate) return false;
+            const a = new Date(selectedCustomDate + "T00:00:00");
+            const b = new Date(a); b.setDate(b.getDate()+1);
+            return d >= a && d < b;
+        }
+        return true;
+    };
+
+    const paidOrders = get(ORDERS).filter(o => String(o.status).toLowerCase() === "paid");
+    const reportOrders = paidOrders.filter(o => matches(parseDate(o)));
+
+    const debts = get(DEBTS).filter(debt => {
+        const v = debt.paidAt || debt.createdAt || debt.date || debt.timestamp;
+        return selectedFilter === "all" ? true : matches(v ? new Date(v) : null);
+    });
+
+    const num = v => Number(v || 0);
+    const money = v => "Ksh " + num(v).toLocaleString("en-KE", {minimumFractionDigits:2, maximumFractionDigits:2});
+    const orderAmount = o => num(o.total || o.amount || o.grandTotal);
+
+    const totalSales = reportOrders.reduce((a,o)=>a+orderAmount(o),0);
+    let cashTotal=0, pochiTotal=0, otherPayments=0;
+    reportOrders.forEach(o=>{
+        const amount=orderAmount(o);
+        const method=String(o.paymentMethod || o.payment || "").toLowerCase();
+        if(method.includes("cash")) cashTotal+=amount;
+        else if(method.includes("pochi") || method.includes("mpesa")) pochiTotal+=amount;
+        else otherPayments+=amount;
+    });
+
+    const productTotals={}; let totalItems=0;
+    reportOrders.forEach(o=>getOrderItems(o).forEach(item=>{
+        const name=String(item.product || "Unknown Product").trim();
+        const key=name.toLowerCase();
+        if(!productTotals[key]) productTotals[key]={name, quantity:0};
+        const q=num(item.quantity); productTotals[key].quantity+=q; totalItems+=q;
+    }));
+    const products=Object.values(productTotals).sort((a,b)=>b.quantity-a.quantity);
+
+    let pendingDebtTotal=0, paidDebtTotal=0;
+    debts.forEach(d=>{
+        const amount=num(d.amount || d.total);
+        const status=String(d.status || "pending").toLowerCase();
+        if(status === "paid" || status === "settled") paidDebtTotal+=amount;
+        else pendingDebtTotal+=amount;
+    });
+
+    let title="All-Time Report";
+    if(selectedFilter==="today") title="Today's Report";
+    else if(selectedFilter==="yesterday") title="Yesterday's Report";
+    else if(selectedFilter==="week") title="Weekly Report";
+    else if(selectedFilter==="month") title="Monthly Report";
+    else if(selectedFilter==="custom" && selectedCustomDate) title="Report - "+selectedCustomDate;
+
+    const {jsPDF}=window.jspdf;
+    const doc=new jsPDF({orientation:"portrait",unit:"mm",format:"a4"});
+    const W=doc.internal.pageSize.getWidth();
+    let y=18;
+
+    const header=()=>{
+        doc.setFont("helvetica","bold"); doc.setFontSize(20);
+        doc.text("SERENE EATERY",W/2,y,{align:"center"}); y+=9;
+        doc.setFontSize(14); doc.text(title,W/2,y,{align:"center"}); y+=6;
+        doc.setFont("helvetica","normal"); doc.setFontSize(9);
+        doc.text("Generated: "+now.toLocaleString(),W/2,y,{align:"center"}); y+=12;
+    };
+    header();
+
+    const section=(name)=>{ if(y>270){doc.addPage();y=18;header();} doc.setFont("helvetica","bold");doc.setFontSize(12);doc.text(name,14,y);y+=7;doc.setFont("helvetica","normal");doc.setFontSize(10); };
+    const row=(label,value)=>{doc.text(String(label),16,y);doc.text(String(value),W-16,y,{align:"right"});y+=6;};
+
+    section("SALES SUMMARY");
+    row("Total Sales",money(totalSales)); row("Receipts",reportOrders.length); row("Cash Sales",money(cashTotal)); row("Pochi / M-Pesa",money(pochiTotal)); row("Other Payments",money(otherPayments)); row("Items Sold",totalItems); y+=5;
+
+    section("PRODUCTS SOLD");
+    if(!products.length){doc.text("No products sold during this period.",16,y);y+=7;}
+    products.forEach(p=>{if(y>275){doc.addPage();y=18;header();section("PRODUCTS SOLD - CONTINUED");}doc.text(p.name.slice(0,45),16,y);doc.text(String(p.quantity),W-16,y,{align:"right"});y+=5.5;});
+    y+=6;
+
+    section("DEBTS"); row("Pending Debts",money(pendingDebtTotal)); row("Paid Debts",money(paidDebtTotal)); y+=4;
+
+    section("RECEIPTS");
+    doc.setFont("helvetica","bold");doc.setFontSize(8);
+    doc.text("Receipt",14,y);doc.text("Time",60,y);doc.text("Payment",100,y);doc.text("Amount",W-14,y,{align:"right"});y+=5;
+    doc.setFont("helvetica","normal");
+    reportOrders.forEach(o=>{
+        if(y>278){doc.addPage();y=18;header();section("RECEIPTS - CONTINUED");doc.setFont("helvetica","bold");doc.setFontSize(8);doc.text("Receipt",14,y);doc.text("Time",60,y);doc.text("Payment",100,y);doc.text("Amount",W-14,y,{align:"right"});y+=5;doc.setFont("helvetica","normal");}
+        const d=parseDate(o); const time=d?d.toLocaleTimeString("en-KE",{hour:"2-digit",minute:"2-digit"}):"-";
+        const receipt=o.receiptNo || o.receiptNumber || o.id || "-";
+        const payment=o.paymentMethod || o.payment || "-";
+        doc.text(String(receipt).slice(0,22),14,y);doc.text(time,60,y);doc.text(String(payment).slice(0,18),100,y);doc.text(money(orderAmount(o)),W-14,y,{align:"right"});y+=5.5;
+    });
+
+    const pages=doc.internal.getNumberOfPages();
+    for(let i=1;i<=pages;i++){doc.setPage(i);doc.setFont("helvetica","normal");doc.setFontSize(8);doc.text("Serene Eatery - Daily Financial Report",14,290);doc.text("Page "+i+" of "+pages,W-14,290,{align:"right"});}
+
+    let fileDate=selectedCustomDate || now.toISOString().slice(0,10);
+    if(selectedFilter==="yesterday") fileDate=yesterday.toISOString().slice(0,10);
+    doc.save("Serene-Eatery-Report-"+fileDate+".pdf");
+}
+
+</script>
+
+
+</body>
+
+</html>

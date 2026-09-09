@@ -1,263 +1,521 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- 🔥 Primary SEO -->
-    <title>Lennox deli | Best Fast Food, Juices & Snacks in Gilgil</title>
-    <meta name="description" content="Lennox deli offers delicious fast food, fresh blended juices, cakes, coffee, and snacks in Gilgil. Order online and enjoy fast delivery.">
-    <meta name="keywords" content="Lennox deli, fast food Gilgil, juices Gilgil, snacks, cakes, coffee, food delivery Gilgil">
+  <title>Serene Eatery</title>
 
-    <!-- 🔥 Author -->
-    <meta name="author" content="SnackWave">
+  <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- 🔥 Open Graph (for WhatsApp, Facebook sharing) -->
-    <meta property="og:title" content="Lennox deli - Fresh Food & Juices in Gilgil">
-    <meta property="og:description" content="Order tasty fast food, juices, and snacks from Lennox deli. Fast delivery in Gilgil.">
-    <meta property="og:image" content="https://yourdomain.com/images/preview.jpg">
-    <meta property="og:url" content="https://yourdomain.com">
-    <meta property="og:type" content="website">
+  <style>
+    * {
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: 400 !important;
+    }
 
-    <!-- 🔥 Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Lennox deli - Fresh Food & Juices">
-    <meta name="twitter:description" content="Delicious snacks, juices, cakes & coffee delivered fast in Gilgil.">
-    <meta name="twitter:image" content="https://yourdomain.com/images/preview.jpg">
+    html {
+      scroll-behavior: smooth;
+    }
 
-    <!-- 🔥 Favicon -->
-    <link rel="icon" href="/images/logo.png" type="image/png">
+    body {
+      background: #ffffff;
+    }
 
-    <!-- 🔥 CSS & Libraries -->
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Smooth scroll -->
-    <script src="https://cdn.jsdelivr.net/npm/smooth-scroll@16/dist/smooth-scroll.polyfills.min.js"></script>
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-
-    <!-- Swiper -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css">
+    a,
+    button {
+      cursor: pointer;
+    }
+  </style>
 </head>
-<body>
 
- <section class="bg-[#fff] h-[90vh]" id="home">
+<body class="bg-white text-gray-700">
 
-    <div class="bg-gray-300 flex justify-evenly p-[1rem] fixed left-0 right-0 z-[100] div-header-html-js">
-            <div class="">
+  <!-- FIXED NAVIGATION -->
+  <header class="fixed top-0 left-0 w-full z-50 bg-white/95 backdrop-blur border-b border-gray-200">
 
-                <div class="flex items-center ">
-                  <a href="index.html"><img src="./images/logo-image.jpeg" alt="Company Logo" class="logo h-10 sm:h-12 md:h-14 w-auto object-contain mix-blend-multiply"></a>
-                
-                </div>
+    <nav class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
 
-            </div>
-            
-<div class="div hidden md:block">
-   <nav> <ul class="flex"> <li class="ml-6 cursor-pointer relative active"><a href="#home">home</a></li> <li class="ml-6 cursor-pointer relative"><a href="#products">products</a></li> <li class="ml-6 cursor-pointer relative"><a href="#services">services</a></li> <li class="ml-6 cursor-pointer relative"><a href="#aboutus">about us</a></li> <li class="ml-6 cursor-pointer relative"><a href="#contact">contact</a></li> </ul> </nav> </div>
-
-            <div class="flex items-center">
-                  <i class="fas fa-user ml-6"></i>
-                <button class="border-b outline-none ml-6"><a href="login.html">login</a></button>    
-                <button class="border-b outline-none ml-6"><a href="signup.html">signup</a></button>
-               <button class="border-b outline-none ml-6"><a href="admin.html">admin</a></button>    
-        </div>
-        </div>
-      
-
-<!-- ================= HERO / SWIPER ================= -->
-<section id="home" class="pt-14 bg-[#fff]">
-  <div class="swiper">
-    <div class="swiper-wrapper"></div>
-    <div class="swiper-pagination"></div>
-  </div>
-</section>
-
-</section>
+      <!-- Logo -->
+      <a
+        href="index.html"
+        class="text-xl tracking-wide text-green-900 cursor-pointer hover:text-green-700 transition duration-300"
+      >
+        Serene Eatery
+      </a>
 
 
-<section class="h-auto pt-6 pb-8 relative" id="products" data-aos="fade-right">
-    <div class="mt-[3rem] ml-6 div-collection-height-html">
-         <h2 class="text-3xl text-center mb-8">Our Menu</h2>
-        <p class="text-gray-500 text-lg mb-2">checkout our hottest dishes</p>
-        <h1 class="text-4xl mb-4">order now</h1>
-    </div>
+      <!-- Desktop Navigation -->
+      <div class="hidden lg:flex items-center gap-6 text-sm text-gray-600">
 
-   <div class="grid grid-cols-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 products-container-html"></div>
+        <a
+          href="waiter.html"
+          class="hover:text-green-800 transition duration-300 cursor-pointer"
+        >
+          Waiter
+        </a>
 
- </div>
-  <div class="shadow-lg p-8 text-center absolute top-[50%] left-[40%] z-[10] transition duration-500 ease-in-out hidden div-container-error">please enter size and color</div>
+        <a
+          href="cashier.html"
+          class="hover:text-green-800 transition duration-300 cursor-pointer"
+        >
+          Cashier
+        </a>
 
-  
-</section>
+        <a
+          href="kitchen.html"
+          class="hover:text-green-800 transition duration-300 cursor-pointer"
+        >
+          Kitchen
+        </a>
 
-<!--section 3 services-->
+        <a
+          href="receipt.html"
+          class="hover:text-green-800 transition duration-300 cursor-pointer"
+        >
+          Receipt
+        </a>
 
-<!-- Services Section -->
-<section class="bg-gray-100 py-16 px-4" id="services">
-   <h2 class="text-3xl  text-gray-500 mb-6 text-center">Our Services</h2>
-  <div class="max-w-6xl mx-auto text-center">
-    
-    <!-- Title -->
-    <h2 class="text-3xl md:text-4xl text-gray-800 mb-4">
-      Why Choose Lennox deli ? 
-    </h2>
-    <p class="text-gray-500 mb-12">
-      Fast, fresh, and made for your cravings.
-    </p>
+        <a
+          href="stock.html"
+          class="hover:text-green-800 transition duration-300 cursor-pointer"
+        >
+          Stock
+        </a>
 
-    <!-- Cards -->
-    <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <a
+          href="admin.html"
+          class="hover:text-green-800 transition duration-300 cursor-pointer"
+        >
+          Admin
+        </a>
 
-      <!-- Card 1 -->
-      <div class="bg-white p-6 rounded-2xl hover:scale-105 transition duration-300">
-        <div class="text-xl mb-4">⚡</div>
-        <h3 class="text-xl mb-2">Fast Delivery</h3>
-        <p class="text-gray-500">
-          Get your food hot and fresh in minutes—right to your doorstep.
-        </p>
+        <a
+          href="contact.html"
+          class="border border-gray-300 px-4 py-2 text-black hover:bg-green-900 hover:text-white hover:border-green-900 transition duration-300 cursor-pointer"
+        >
+          Contact
+        </a>
+
       </div>
 
-      <!-- Card 2 -->
-      <div class="bg-white p-6 rounded-2xl hover:scale-105 transition duration-300">
-        <div class="text-xl mb-4">🥬</div>
-        <h3 class="text-xl mb-2">Fresh Ingredients</h3>
-        <p class="text-gray-500">
-          We use only fresh, high-quality ingredients for the best taste every time.
+    </nav>
+
+  </header>
+
+
+  <!-- HERO -->
+  <section
+    class="min-h-screen flex items-center pt-24 bg-cover bg-center relative"
+    style="
+      background-image:
+      linear-gradient(
+        to right,
+        rgba(255,255,255,0.97),
+        rgba(255,255,255,0.80),
+        rgba(255,255,255,0.45)
+      ),
+      url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1920&q=85');
+    "
+  >
+
+    <div class="max-w-7xl mx-auto px-6 py-20 w-full">
+
+      <div class="max-w-3xl">
+
+        <p class="text-sm tracking-[0.25em] text-green-900 mb-6">
+          WELCOME TO SERENE EATERY
         </p>
-      </div>
 
-      <!-- Card 3 -->
-      <div class="bg-white p-6 rounded-2xl hover:scale-105 transition duration-300">
-        <div class="text-xl mb-4">💸</div>
-        <h3 class="text-xl mb-2">Pocket-Friendly</h3>
-        <p class="text-gray-500">
-          Delicious meals that don’t break the bank—perfect for students.
+        <h1 class="text-5xl md:text-7xl leading-tight text-black">
+          Good food.
+          Better organization.
+        </h1>
+
+        <p class="mt-8 text-lg md:text-xl leading-relaxed text-gray-700 max-w-2xl">
+          Serene Eatery brings food service, orders, payments,
+          kitchen operations and stock management together in
+          one organized system.
         </p>
-      </div>
 
-      <!-- Card 4 -->
-      <div class="bg-white p-6 rounded-2xl hover:scale-105 transition duration-300">
-        <div class="text-xl mb-4">📱</div>
-        <h3 class="text-xl mb-2">Easy Ordering</h3>
-        <p class="text-gray-500">
-          Order in seconds through our website or WhatsApp—simple and fast.
-        </p>
-      </div>
+        <div class="mt-10 flex flex-wrap gap-4">
 
-    </div>
-  </div>
-</section>
-
-<!--section 4 about us-->
-
-<!-- About Us Section -->
-<section class="py-16 px-4 bg-white" id="aboutus">
-  <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center">
-    
-    <!-- Image -->
-    <div>
-      <img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe"
-           alt="Food"
-           class="rounded-2xl shadow-lg w-full h-[70vh] object-cover">
-    </div>
-
-    <!-- Text Content -->
-    <div>
-      <h2 class="text-3xl md:text-4xl text-gray-800 mb-4">
-        About Lennox deli
-      </h2>
-
-      <p class="text-gray-600 mb-4">
-        Lennox deli is your go-to spot for fast, fresh, and delicious snacks made to satisfy your cravings anytime.
-      </p>
-
-      <p class="text-gray-600 mb-4">
-        From crispy fries to refreshing juices and tasty smokies, we serve quality food that fits your lifestyle.
-      </p>
-
-      <p class="text-gray-600 mb-6">
-        Whether you're relaxing, studying, or on the move, Lennox deli delivers flavor, speed, and affordability.
-      </p>
-
-    </div>
-
-  </div>
-</section>
-
-
-<!-- Contact Us Section -->
-<section class="bg-gray-100 py-16 px-4" id="contact">
-  <div class="max-w-6xl mx-auto">
-    
-    <!-- Title -->
-    <div class="text-center mb-12">
-      <h2 class="text-3xl md:text-4xl text-gray-800 mb-2">
-        Get In Touch 
-      </h2>
-      <p class="text-gray-500">
-        We’d love to hear from you—order, ask, or just say hello!
-      </p>
-    </div>
-
-    <div class="grid md:grid-cols-2 gap-10">
-      
-      <!-- Contact Info -->
-      <div class="space-y-6">
-        <div>
-          <h3 class="font-semibold text-lg">📍 Location</h3>
-          <p class="text-gray-600">gilgil Kenya</p>
-        </div>
-
-        <div>
-          <h3 class="font-semibold text-lg">📞 Phone</h3>
-          <p class="text-gray-600">+254 712 345 678</p>
-        </div>
-
-        <div>
-          <h3 class="font-semibold text-lg">💬 WhatsApp</h3>
-          <a href="https://wa.me/254712345678" 
-             class="text-green-600 hover:underline">
-            Chat with us instantly
+          <a
+            href="#dashboards"
+            class="bg-green-900 text-white px-7 py-3.5 text-sm hover:bg-green-700 hover:-translate-y-1 transition duration-300 cursor-pointer"
+          >
+            Explore Our System
           </a>
+
+          <a
+            href="contact.html"
+            class="bg-white/90 border border-gray-300 px-7 py-3.5 text-sm text-black hover:border-green-900 hover:text-green-900 hover:-translate-y-1 transition duration-300 cursor-pointer"
+          >
+            Contact Us
+          </a>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ABOUT -->
+  <section id="about" class="py-24 bg-white">
+
+    <div class="max-w-7xl mx-auto px-6">
+
+      <div class="grid md:grid-cols-2 gap-16">
+
+        <div>
+
+          <p class="text-sm tracking-[0.2em] text-green-900 mb-5">
+            ABOUT US
+          </p>
+
+          <h2 class="text-3xl md:text-5xl text-black leading-tight">
+            A simpler way to manage daily restaurant operations.
+          </h2>
+
+        </div>
+
+        <div class="text-gray-600 leading-relaxed space-y-6">
+
+          <p>
+            Serene Eatery brings different parts of the restaurant
+            together through one organized management system.
+          </p>
+
+          <p>
+            From the moment a waiter creates an order to the time
+            payment is received, food is prepared and stock is
+            updated, every department remains connected.
+          </p>
+
+          <p>
+            Our goal is to reduce manual errors, improve accountability
+            and give the business a clearer understanding of its
+            daily performance.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- DASHBOARDS -->
+  <section id="dashboards" class="bg-gray-100 py-24">
+
+    <div class="max-w-7xl mx-auto px-6">
+
+      <div class="max-w-2xl mb-14">
+
+        <p class="text-sm tracking-[0.2em] text-green-900 mb-5">
+          OUR SYSTEM
+        </p>
+
+        <h2 class="text-3xl md:text-5xl text-black">
+          One system. Six connected dashboards.
+        </h2>
+
+        <p class="mt-5 text-gray-600 leading-relaxed">
+          Every department has its own workspace while important
+          information stays connected across the business.
+        </p>
+
+      </div>
+
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+
+        <!-- WAITER -->
+        <a
+          href="waiter.html"
+          class="group bg-white border border-gray-200 p-8 hover:border-green-900 hover:-translate-y-2 hover:shadow-lg transition duration-300 cursor-pointer"
+        >
+
+          <div class="text-green-900 text-sm mb-8">
+            01
+          </div>
+
+          <h3 class="text-xl text-black group-hover:text-green-900 transition duration-300">
+            Waiter
+          </h3>
+
+          <p class="mt-4 text-gray-600 leading-relaxed">
+            Create customer orders, select products and quantities,
+            review items and send orders for processing.
+          </p>
+
+          <p class="mt-8 text-sm text-green-900">
+            Open dashboard →
+          </p>
+
+        </a>
+
+
+        <!-- CASHIER -->
+        <a
+          href="cashier.html"
+          class="group bg-white border border-gray-200 p-8 hover:border-green-900 hover:-translate-y-2 hover:shadow-lg transition duration-300 cursor-pointer"
+        >
+
+          <div class="text-green-900 text-sm mb-8">
+            02
+          </div>
+
+          <h3 class="text-xl text-black group-hover:text-green-900 transition duration-300">
+            Cashier
+          </h3>
+
+          <p class="mt-4 text-gray-600 leading-relaxed">
+            Receive waiter orders, confirm payments and manage
+            cash or Pochi transactions.
+          </p>
+
+          <p class="mt-8 text-sm text-green-900">
+            Open dashboard →
+          </p>
+
+        </a>
+
+
+        <!-- KITCHEN -->
+        <a
+          href="kitchen.html"
+          class="group bg-white border border-gray-200 p-8 hover:border-green-900 hover:-translate-y-2 hover:shadow-lg transition duration-300 cursor-pointer"
+        >
+
+          <div class="text-green-900 text-sm mb-8">
+            03
+          </div>
+
+          <h3 class="text-xl text-black group-hover:text-green-900 transition duration-300">
+            Kitchen
+          </h3>
+
+          <p class="mt-4 text-gray-600 leading-relaxed">
+            Track food prepared, carried forward, sold, remaining
+            and unavailable products.
+          </p>
+
+          <p class="mt-8 text-sm text-green-900">
+            Open dashboard →
+          </p>
+
+        </a>
+
+
+        <!-- RECEIPT -->
+        <a
+          href="receipt.html"
+          class="group bg-white border border-gray-200 p-8 hover:border-green-900 hover:-translate-y-2 hover:shadow-lg transition duration-300 cursor-pointer"
+        >
+
+          <div class="text-green-900 text-sm mb-8">
+            04
+          </div>
+
+          <h3 class="text-xl text-black group-hover:text-green-900 transition duration-300">
+            Receipt
+          </h3>
+
+          <p class="mt-4 text-gray-600 leading-relaxed">
+            Store completed transactions with receipt number,
+            payment method, date and time.
+          </p>
+
+          <p class="mt-8 text-sm text-green-900">
+            Open dashboard →
+          </p>
+
+        </a>
+
+
+        <!-- STOCK -->
+        <a
+          href="stock.html"
+          class="group bg-white border border-gray-200 p-8 hover:border-green-900 hover:-translate-y-2 hover:shadow-lg transition duration-300 cursor-pointer"
+        >
+
+          <div class="text-green-900 text-sm mb-8">
+            05
+          </div>
+
+          <h3 class="text-xl text-black group-hover:text-green-900 transition duration-300">
+            Stock
+          </h3>
+
+          <p class="mt-4 text-gray-600 leading-relaxed">
+            Monitor ingredients, products, purchases, usage and
+            items that are running low.
+          </p>
+
+          <p class="mt-8 text-sm text-green-900">
+            Open dashboard →
+          </p>
+
+        </a>
+
+
+        <!-- ADMIN -->
+        <a
+          href="admin.html"
+          class="group bg-white border border-gray-200 p-8 hover:border-green-900 hover:-translate-y-2 hover:shadow-lg transition duration-300 cursor-pointer"
+        >
+
+          <div class="text-green-900 text-sm mb-8">
+            06
+          </div>
+
+          <h3 class="text-xl text-black group-hover:text-green-900 transition duration-300">
+            Admin
+          </h3>
+
+          <p class="mt-4 text-gray-600 leading-relaxed">
+            View sales, expenses, workers, payments, wastage and
+            overall daily business performance.
+          </p>
+
+          <p class="mt-8 text-sm text-green-900">
+            Open dashboard →
+          </p>
+
+        </a>
+
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- HOW IT WORKS -->
+  <section class="py-24 bg-white">
+
+    <div class="max-w-7xl mx-auto px-6">
+
+      <p class="text-sm tracking-[0.2em] text-green-900 mb-5">
+        HOW IT WORKS
+      </p>
+
+      <h2 class="text-3xl md:text-5xl text-black mb-14">
+        From order to business report.
+      </h2>
+
+
+      <div class="grid md:grid-cols-4 gap-8">
+
+        <div>
+          <p class="text-green-900 mb-5">01</p>
+          <h3 class="text-black text-lg">Order</h3>
+          <p class="text-gray-600 mt-3 leading-relaxed">
+            A waiter creates a customer order.
+          </p>
         </div>
 
         <div>
-          <h3 class="font-semibold text-lg">📧 Email</h3>
-          <p class="text-gray-600">Lennoxdeli@gmail.com</p>
+          <p class="text-green-900 mb-5">02</p>
+          <h3 class="text-black text-lg">Payment</h3>
+          <p class="text-gray-600 mt-3 leading-relaxed">
+            The cashier confirms cash or Pochi payment.
+          </p>
         </div>
+
+        <div>
+          <p class="text-green-900 mb-5">03</p>
+          <h3 class="text-black text-lg">Stock</h3>
+          <p class="text-gray-600 mt-3 leading-relaxed">
+            Product and kitchen information is updated.
+          </p>
+        </div>
+
+        <div>
+          <p class="text-green-900 mb-5">04</p>
+          <h3 class="text-black text-lg">Report</h3>
+          <p class="text-gray-600 mt-3 leading-relaxed">
+            Business performance becomes visible to the admin.
+          </p>
+        </div>
+
       </div>
 
-      <!-- Contact Form -->
-      <form class="bg-white p-6 rounded-2xl shadow-lg space-y-4">
-        
-        <input type="text" placeholder="Your Name"
-          class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black">
+    </div>
 
-        <input type="email" placeholder="Your Email"
-          class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black">
+  </section>
 
-        <textarea placeholder="Your Message" rows="4"
-          class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"></textarea>
 
-        <button class="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition">
-          Send Message
-        </button>
+  <!-- CTA -->
+  <section class="bg-gray-100 py-24">
 
-      </form>
+    <div class="max-w-7xl mx-auto px-6">
+
+      <div class="max-w-2xl">
+
+        <h2 class="text-3xl md:text-5xl text-black">
+          Better organization starts with one system.
+        </h2>
+
+        <p class="mt-6 text-gray-600 leading-relaxed">
+          Serene Eatery keeps daily restaurant operations organized
+          from the waiter to the administrator.
+        </p>
+
+        <a
+          href="contact.html"
+          class="inline-block mt-8 bg-green-900 text-white px-7 py-3.5 text-sm hover:bg-green-700 hover:-translate-y-1 transition duration-300 cursor-pointer"
+        >
+          Contact Serene Eatery
+        </a>
+
+      </div>
 
     </div>
-  </div>
-</section>
-  <footer class="text-center text-gray-500 text-sm mt-12 border-t pt-4">
-    © 2026 Lennox deli. All Rights Reserved.
+
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-gray-200">
+
+    <div class="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between gap-4 text-sm text-gray-500">
+
+      <p>
+        © 2026 Serene Eatery. All rights reserved.
+      </p>
+
+      <div class="flex flex-wrap gap-6">
+
+        <a href="waiter.html" class="hover:text-green-900 transition cursor-pointer">
+          Waiter
+        </a>
+
+        <a href="cashier.html" class="hover:text-green-900 transition cursor-pointer">
+          Cashier
+        </a>
+
+        <a href="admin.html" class="hover:text-green-900 transition cursor-pointer">
+          Admin
+        </a>
+
+        <a href="contact.html" class="hover:text-green-900 transition cursor-pointer">
+          Contact
+        </a>
+
+      </div>
+
+    </div>
+
   </footer>
+
 </body>
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script type="module" src="scripts/scripts.js"></script>
-<script type="module" src="products/appendProducts.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
 </html>

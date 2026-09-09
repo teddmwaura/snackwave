@@ -1,322 +1,2091 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- 🔥 Clean title -->
-    <title>Admin Dashboard | Lennox deli</title>
+    <title>Admin Dashboard | Serene Eatery</title>
 
-    <!-- 🔥 Prevent indexing (VERY IMPORTANT) -->
-    <meta name="robots" content="noindex, nofollow">
-
-    <!-- 🔥 Optional (extra privacy hint) -->
-    <meta name="googlebot" content="noindex, nofollow">
-
-    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
 
-    <!-- Your styles -->
-    <link rel="stylesheet" href="styles.css">
+        * {
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: 400 !important;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        button,
+        a,
+        input {
+            cursor: pointer;
+        }
+
+    </style>
+
 </head>
 
-<body class="bg-[#efefef]">
-    <div class="flex h-screen">
-      <div class="fixed left-[10px] top-[20px]">
-                <i class="fa-solid fa-bars cursor-pointer text-xl div-open-html text-gray-500"></i>
-            </div>
-        <aside class="w-54 rounded-md bg-gray-300 flex flex-col pt-20 border-r  absolute top-0 bottom-0 left-[-300px]  transition-all duration-[800ms]  div-nav-html">
-           <div class="absolute right-[10px] top-0">
-            <i class="fa-solid fa-xmark text-xlg cursor-pointer div-close-html"></i>
-           </div>
-            <a href="index.html"><p class="text-gray-500 text-center mb-4">main menu</p></a>
-            <nav class="flex flex-col gap-4">
-                <button class="hover:bg-gray-100 p-2 rounded-md text-[#260b0b] text-lg select-button-js " data-page-id="dashboard">dashboard</button>
-                <button class="hover:bg-gray-100 p-2 rounded-md text-[#260b0b] text-lg select-button-js" data-page-id="orders">orders</button>
-                <button class="hover:bg-gray-100 p-2 rounded-md text-[#260b0b] text-lg select-button-js" data-page-id="analytics">analytics</button>
-                <button class="hover:bg-gray-100 p-2 rounded-md text-[#260b0b] text-lg select-button-js" data-page-id="ai">ai suggestions</button>
-            </nav>
-        </aside>
-        <main class="flex-1 overflow-auto">
-            <div id="dashboard" class="page border-t pt-4">
-            <h2 class="text-2xl text-gray-700 mb-2 text-center">welcome back, Lennox deli</h2>
-            <p class="text-gray-500 mb-4 text-center">welcome to dashboard</p>
-            
-            <div class="flex flex-wrap gap-2 justify-center align-center mb-4">
-                <div class="shadow-lg p-2 rounded-lg bg-gray-300">
-                    <h3 class="text-white mb-2">Total Revenue: <span class="text-gray-500 span-total-revenue">kes 0</span></h3>
-                </div>
-                <div class="shadow-lg p-2 ml-2 rounded-lg bg-gray-300">
-                    <h3 class="mb-2 text-white">Expenses: <span class="text-gray-500 span-total-expenses">kes 0</span></h3>
-                </div>
 
-                <div class="shadow-lg p-2 ml-2 rounded-lg bg-gray-300">
-                <h3 class="mb-2 text-white">Net Profit: <span class="text-gray-500 span-total-profit">kes 0</span></h3>
-                </div>
+<body class="bg-gray-100 text-gray-800">
 
-                 <div class="shadow-lg p-2 ml-2 rounded-lg bg-gray-300">
-                <h3 class="mb-2 text-white">Orders: <span class="text-gray-500 span-total-orders">0</span></h3>
-                </div>
-            </div>
-            
 
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-3 mt-4">
+<!-- ================= HEADER ================= -->
 
-  <!-- LEFT SIDE -->
-  <div class="grid grid-cols-1 gap-6">
+<header class="fixed top-0 left-0 w-full bg-white border-b border-gray-200 z-50">
 
-    <!-- Sales Table -->
-    <div class=" bg-white p-4 rounded-xl shadow">
-      <h1 class="text-gray-500 mb-4 text-center text-sm md:text-base">
-        Sales Today Per Item Sold
-      </h1>
+    <nav class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
 
-      <table class="w-full">
-        <thead class="bg-gray-300 text-white text-sm">
-          <tr>
-            <th class="py-2 px-3 text-left">Product</th>
-            <th class="py-2 px-3 text-left">Sold</th>
-            <th class="py-2 px-3 text-left">Amount</th>
-          </tr>
-        </thead>
+        <a href="index.html"
+           class="text-xl text-green-900">
+            Serene Eatery
+        </a>
 
-        <tbody class="text-gray-700 text-sm append-todays-orders">
-        </tbody>
-      </table>
+
+        <div class="hidden md:flex gap-6 text-sm">
+
+            <a href="waiter.html"
+               class="hover:text-green-900 transition">
+                Waiter
+            </a>
+
+            <a href="cashier.html"
+               class="hover:text-green-900 transition">
+                Cashier
+            </a>
+
+            <a href="stock.html"
+               class="hover:text-green-900 transition">
+                Stock
+            </a>
+
+            <a href="receipts.html"
+               class="hover:text-green-900 transition">
+                Receipts
+            </a>
+
+            <a href="admin.html"
+               class="text-green-900">
+                Admin
+            </a>
+
+        </div>
+
+    </nav>
+
+</header>
+
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="max-w-7xl mx-auto px-6 pt-28 pb-16">
+
+
+    <!-- TITLE -->
+
+    <div class="mb-8">
+
+        <p class="text-xs tracking-widest text-green-900">
+            SERENE EATERY
+        </p>
+
+        <h1 class="text-3xl text-black mt-2">
+            Admin Dashboard
+        </h1>
+
+        <p class="text-gray-500 mt-2">
+            Daily business performance and operations.
+        </p>
+
+        <p class="text-xs text-gray-400 mt-2">
+            <span id="currentDate"></span>
+        </p>
+
     </div>
 
-    <!-- Stock Table -->
-    <div class="overflow-x-auto bg-white p-4 rounded-xl shadow">
-      <h1 class="text-gray-500 mb-4 text-center text-sm md:text-base">
-        Stock Overview
-      </h1>
 
-      <table class="min-w-full">
-        <thead class="bg-gray-300 text-white text-sm">
-          <tr>
-            <th class="py-2 px-3 text-left">Product</th>
-            <th class="py-2 px-3 text-left">Quantity</th>
-            <th class="py-2 px-3 text-left">Status</th>
-          </tr>
-        </thead>
 
-        <tbody class="text-gray-700 text-sm stock-overview-html-js">
-          <tr class="border-b">
-            <td class="py-2 px-3">-</td>
-            <td class="py-2 px-3">-</td>
-            <td class="py-2 px-3">
-              <span class="bg-green-100 px-2 py-1 rounded text-xs">
-                -
-              </span>
-            </td>
-          </tr>
+    <!-- ================= FINANCIAL SUMMARY ================= -->
 
-        </tbody>
-      </table>
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 mb-6">
+
+
+        <div class="bg-white border border-gray-200 p-5">
+
+            <p class="text-xs text-gray-400">
+                TOTAL SALES
+            </p>
+
+            <p id="totalSales"
+               class="text-xl text-black mt-3">
+                Ksh 0
+            </p>
+
+        </div>
+
+
+
+        <div class="bg-white border border-gray-200 p-5">
+
+            <p class="text-xs text-gray-400">
+                CASH SALES
+            </p>
+
+            <p id="cashSales"
+               class="text-xl mt-3">
+                Ksh 0
+            </p>
+
+        </div>
+
+
+
+        <div class="bg-white border border-gray-200 p-5">
+
+            <p class="text-xs text-gray-400">
+                POCHI
+            </p>
+
+            <p id="pochiSales"
+               class="text-xl mt-3">
+                Ksh 0
+            </p>
+
+        </div>
+
+
+
+        <div class="bg-white border border-gray-200 p-5">
+
+            <p class="text-xs text-gray-400">
+                EXPENSES
+            </p>
+
+            <p id="totalExpenses"
+               class="text-xl mt-3">
+                Ksh 0
+            </p>
+
+        </div>
+
+
+
+        <div class="bg-white border border-gray-200 p-5">
+
+            <p class="text-xs text-gray-400">
+                EST. PROFIT
+            </p>
+
+            <p id="estimatedProfit"
+               class="text-xl text-green-900 mt-3">
+                Ksh 0
+            </p>
+
+        </div>
+
+
+
+        <div class="bg-white border border-gray-200 p-5">
+
+            <p class="text-xs text-gray-400">
+                PROFIT MARGIN
+            </p>
+
+            <p id="profitMargin"
+               class="text-xl mt-3">
+                0%
+            </p>
+
+        </div>
+
+
+
+        <div class="bg-white border border-gray-200 p-5">
+
+            <p class="text-xs text-gray-400">
+                PAID ORDERS
+            </p>
+
+            <p id="paidOrders"
+               class="text-xl mt-3">
+                0
+            </p>
+
+        </div>
+
     </div>
 
-  </div>
 
-  <!-- RIGHT SIDE -->
-  <div class="overflow-x-auto bg-white p-4 rounded-xl shadow">
 
-    <h1 class="text-gray-500 mb-4 text-center text-sm md:text-base">
-      Monthly Spending
-    </h1>
+    <!-- ================= CASH POSITION ================= -->
 
-    <table class="min-w-full">
-      <thead class="bg-gray-300 text-white text-sm">
-        <tr>
-          <th class="py-2 px-3 text-left">Expense</th>
-          <th class="py-2 px-3 text-left">Amount</th>
-          <th class="py-2 px-3 text-left">Status</th>
-          <th class="py-2 px-3 text-left">Total</th>
-        </tr>
-      </thead>
+    <section class="bg-white border border-gray-200 p-6 mb-6">
 
-      <tbody class="text-gray-700 text-sm">
-        <tr class="border-b">
-          <td class="py-2 px-3">Shop Rent</td>
-          <td class="py-2 px-3">10,000</td>
-          <td class="py-2 px-3">
-            <span class="bg-green-100 px-2 py-1 rounded text-xs">paid</span>
-          </td>
-          <td class="py-2 px-3">10,000</td>
-        </tr>
+        <div class="flex justify-between items-center mb-6">
 
-        <tr class="border-b">
-          <td class="py-2 px-3">Salary</td>
-          <td class="py-2 px-3">5,000</td>
-          <td class="py-2 px-3">
-            <span class="bg-red-100 text-red-700 px-2 py-1 rounded text-xs">
-              not paid
-            </span>
-          </td>
-          <td class="py-2 px-3">5,000</td>
-        </tr>
+            <div>
 
-        <tr class="border-b">
-          <td class="py-2 px-3">Electricity</td>
-          <td class="py-2 px-3">10,000</td>
-          <td class="py-2 px-3">
-            <span class="bg-red-100 text-red-700 px-2 py-1 rounded text-xs">
-              not paid
-            </span>
-          </td>
-          <td class="py-2 px-3">10,000</td>
-        </tr>
+                <h2 class="text-xl">
+                    Daily Cash Position
+                </h2>
 
-        <tr class="border-b">
-          <td class="py-2 px-3">Other</td>
-          <td class="py-2 px-3">2,000</td>
-          <td class="py-2 px-3">
-            <span class="bg-yellow-100 px-2 py-1 rounded text-xs">
-              pending
-            </span>
-          </td>
-          <td class="py-2 px-3">2,000</td>
-        </tr>
+                <p class="text-sm text-gray-400 mt-1">
+                    Cash received and recorded expenses.
+                </p>
 
-        <tr class="font-semibold">
-          <td class="py-2 px-3">Net Profit</td>
-          <td class="py-2 px-3">—</td>
-          <td class="py-2 px-3">
-            <span class="bg-green-100 px-2 py-1 rounded text-xs">
-              good
-            </span>
-          </td>
-          <td class="py-2 px-3">15,000</td>
-        </tr>
-      </tbody>
-    </table>
+            </div>
 
-  </div>
+        </div>
 
-</div>
-          
-   </div>
 
-<!--orders-->
 
-            <div id="orders" class="page hidden">
-                <section>
-                    <div class="text-center pt-12">
-                        <h1 class="text-gray-500">your orders and pending orders appear here</h1>
+        <div class="grid md:grid-cols-4 gap-4">
+
+
+            <div class="border p-5">
+
+                <p class="text-xs text-gray-400">
+                    OPENING BALANCE
+                </p>
+
+                <div class="flex gap-2 mt-3">
+
+                    <input
+                        id="openingBalance"
+                        type="number"
+                        min="0"
+                        placeholder="0"
+                        class="w-full border p-2"
+                    >
+
+                    <button
+                        onclick="saveOpeningBalance()"
+                        class="bg-black text-white px-4">
+
+                        Save
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="border p-5">
+
+                <p class="text-xs text-gray-400">
+                    CASH SALES
+                </p>
+
+                <p id="cashPosition"
+                   class="text-2xl mt-3">
+                    Ksh 0
+                </p>
+
+            </div>
+
+
+
+            <div class="border p-5">
+
+                <p class="text-xs text-gray-400">
+                    CASH EXPENSES
+                </p>
+
+                <p id="cashExpenses"
+                   class="text-2xl mt-3">
+                    Ksh 0
+                </p>
+
+            </div>
+
+
+
+            <div class="border p-5">
+
+                <p class="text-xs text-gray-400">
+                    EXPECTED CASH
+                </p>
+
+                <p id="expectedCash"
+                   class="text-2xl text-green-900 mt-3">
+                    Ksh 0
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= OPERATIONS ================= -->
+
+    <div class="grid lg:grid-cols-2 gap-6">
+
+
+        <!-- ================= WORKERS ================= -->
+
+        <section class="bg-white border border-gray-200 p-6">
+
+            <div class="flex justify-between mb-5">
+
+                <div>
+
+                    <h2 class="text-xl">
+                        Workers Today
+                    </h2>
+
+                    <p class="text-sm text-gray-400 mt-1">
+                        Wages and payment status.
+                    </p>
+
+                </div>
+
+                <div>
+
+                    <span id="workerCount"
+                          class="text-sm text-gray-500">
+                        0 workers
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="grid grid-cols-2 gap-3 mb-5">
+
+                <div class="border p-4">
+
+                    <p class="text-xs text-gray-400">
+                        WAGES PAID
+                    </p>
+
+                    <p id="wagesPaid"
+                       class="text-lg mt-2">
+                        Ksh 0
+                    </p>
+
+                </div>
+
+
+
+                <div class="border p-4">
+
+                    <p class="text-xs text-gray-400">
+                        WAGES PENDING
+                    </p>
+
+                    <p id="wagesPending"
+                       class="text-lg mt-2">
+                        Ksh 0
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div id="workersList"
+                 class="space-y-2">
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= EXPENSES ================= -->
+
+        <section class="bg-white border border-gray-200 p-6">
+
+            <h2 class="text-xl mb-5">
+                Today's Expenses
+            </h2>
+
+            <div id="expensesList">
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= DEBTS ================= -->
+
+        <section class="bg-white border border-gray-200 p-6">
+
+            <div class="flex justify-between mb-5">
+
+                <div>
+
+                    <h2 class="text-xl">
+                        Customer Debts
+                    </h2>
+
+                    <p class="text-sm text-gray-400 mt-1">
+                        Outstanding and paid debts.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="grid grid-cols-2 gap-3 mb-5">
+
+                <div class="border p-4">
+
+                    <p class="text-xs text-gray-400">
+                        PENDING
+                    </p>
+
+                    <p id="pendingDebt"
+                       class="text-lg mt-2">
+                        Ksh 0
+                    </p>
+
+                </div>
+
+
+
+                <div class="border p-4">
+
+                    <p class="text-xs text-gray-400">
+                        PAID
+                    </p>
+
+                    <p id="paidDebt"
+                       class="text-lg mt-2">
+                        Ksh 0
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div id="debtsList">
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= PRODUCTION ================= -->
+
+        <section class="bg-white border border-gray-200 p-6">
+
+            <div class="flex justify-between mb-5">
+
+                <div>
+
+                    <h2 class="text-xl">
+                        Today's Production
+                    </h2>
+
+                    <p class="text-sm text-gray-400 mt-1">
+                        Food produced by the kitchen.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div id="productionList">
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= WASTAGE ================= -->
+
+        <section class="bg-white border border-gray-200 p-6">
+
+            <h2 class="text-xl mb-5">
+                Today's Wastage
+            </h2>
+
+            <div id="wastageList">
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= STOCK ALERTS ================= -->
+
+        <section class="bg-white border border-gray-200 p-6">
+
+            <h2 class="text-xl mb-2">
+                Stock Alerts
+            </h2>
+
+            <p class="text-sm text-gray-400 mb-5">
+                Products that are running low or finished.
+            </p>
+
+            <div id="stockAlerts">
+            </div>
+
+        </section>
+
+    </div>
+
+
+
+    <!-- ================= DAILY PERFORMANCE ================= -->
+
+    <section class="bg-white border border-gray-200 p-6 mt-6">
+
+        <h2 class="text-xl">
+            Daily Performance
+        </h2>
+
+        <p class="text-sm text-gray-400 mt-1 mb-6">
+            Quick overview of how Serene Eatery performed today.
+        </p>
+
+
+
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+
+
+            <div class="border p-5">
+
+                <p class="text-xs text-gray-400">
+                    SALES
+                </p>
+
+                <p id="performanceSales"
+                   class="text-xl mt-3">
+                    Ksh 0
+                </p>
+
+            </div>
+
+
+
+            <div class="border p-5">
+
+                <p class="text-xs text-gray-400">
+                    EXPENSES
+                </p>
+
+                <p id="performanceExpenses"
+                   class="text-xl mt-3">
+                    Ksh 0
+                </p>
+
+            </div>
+
+
+
+            <div class="border p-5">
+
+                <p class="text-xs text-gray-400">
+                    PROFIT
+                </p>
+
+                <p id="performanceProfit"
+                   class="text-xl text-green-900 mt-3">
+                    Ksh 0
+                </p>
+
+            </div>
+
+
+
+            <div class="border p-5">
+
+                <p class="text-xs text-gray-400">
+                    MARGIN
+                </p>
+
+                <p id="performanceMargin"
+                   class="text-xl mt-3">
+                    0%
+                </p>
+
+            </div>
+
+
+
+            <div class="border p-5">
+
+                <p class="text-xs text-gray-400">
+                    PRODUCTION
+                </p>
+
+                <p id="performanceProduction"
+                   class="text-xl mt-3">
+                    0
+                </p>
+
+            </div>
+
+
+
+            <div class="border p-5">
+
+                <p class="text-xs text-gray-400">
+                    WASTAGE
+                </p>
+
+                <p id="performanceWastage"
+                   class="text-xl mt-3">
+                    0
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <div id="performanceMessage"
+             class="border mt-6 p-5 text-sm">
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<script>
+
+
+/* =====================================================
+   SERENE EATERY ADMIN DASHBOARD
+===================================================== */
+
+
+/* ================= STORAGE KEYS ================= */
+
+const ORDERS = "serene_orders";
+const EXPENSES = "serene_expenses";
+const WORKERS = "serene_workers";
+const DEBTS = "serene_debts";
+const PRODUCTION = "serene_production";
+const STOCK = "serene_stock";
+const WASTAGE = "serene_wastage";
+const OPENING = "serene_opening_balance";
+
+
+/* ================= HELPERS ================= */
+
+function getData(key) {
+
+    try {
+
+        const data =
+            JSON.parse(
+                localStorage.getItem(key) || "[]"
+            );
+
+        return Array.isArray(data)
+            ? data
+            : [];
+
+    } catch {
+
+        return [];
+
+    }
+
+}
+
+
+function saveData(key, data) {
+
+    localStorage.setItem(
+        key,
+        JSON.stringify(data)
+    );
+
+}
+
+
+function money(amount) {
+
+    return "Ksh " +
+        Number(amount || 0)
+        .toLocaleString();
+
+}
+
+
+function today() {
+
+    return new Date()
+        .toLocaleDateString();
+
+}
+
+
+function escapeHTML(value) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        value ?? "";
+
+    return div.innerHTML;
+
+}
+
+
+
+/* ================= DATE ================= */
+
+document.getElementById(
+    "currentDate"
+).textContent =
+new Date().toLocaleDateString(
+    undefined,
+    {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+    }
+);
+
+
+
+/* ================= OPENING BALANCE ================= */
+
+function getOpeningBalance() {
+
+    return Number(
+        localStorage.getItem(
+            OPENING
+        ) || 0
+    );
+
+}
+
+
+function saveOpeningBalance() {
+
+    const input =
+        document.getElementById(
+            "openingBalance"
+        );
+
+    const amount =
+        Number(input.value);
+
+    if (amount < 0) {
+
+        alert(
+            "Opening balance cannot be negative."
+        );
+
+        return;
+
+    }
+
+    localStorage.setItem(
+        OPENING,
+        amount
+    );
+
+    render();
+
+    alert(
+        "Opening balance saved."
+    );
+
+}
+
+
+
+/* ================= MAIN RENDER ================= */
+
+function render() {
+
+
+    /* =================================================
+       ORDERS
+    ================================================= */
+
+    const allOrders =
+        getData(ORDERS);
+
+
+    const paidOrders =
+        allOrders.filter(
+            order =>
+                order.status === "paid"
+        );
+
+
+    const totalSales =
+        paidOrders.reduce(
+            (sum, order) =>
+                sum + Number(order.total || 0),
+            0
+        );
+
+
+    const cashSales =
+        paidOrders
+            .filter(
+                order =>
+                    order.paymentMethod === "Cash"
+            )
+            .reduce(
+                (sum, order) =>
+                    sum + Number(order.total || 0),
+                0
+            );
+
+
+    const pochiSales =
+        paidOrders
+            .filter(
+                order =>
+                    order.paymentMethod === "Pochi"
+            )
+            .reduce(
+                (sum, order) =>
+                    sum + Number(order.total || 0),
+                0
+            );
+
+
+
+    /* =================================================
+       EXPENSES
+    ================================================= */
+
+    const allExpenses =
+        getData(EXPENSES);
+
+
+    const todaysExpenses =
+        allExpenses.filter(
+            expense =>
+                expense.date === today()
+        );
+
+
+    const totalExpenses =
+        todaysExpenses.reduce(
+            (sum, expense) =>
+                sum + Number(expense.amount || 0),
+            0
+        );
+
+
+
+    /* =================================================
+       PROFIT
+    ================================================= */
+
+    const estimatedProfit =
+        totalSales -
+        totalExpenses;
+
+
+    const profitMargin =
+        totalSales > 0
+            ? (estimatedProfit / totalSales) * 100
+            : 0;
+
+
+
+    /* =================================================
+       FINANCIAL CARDS
+    ================================================= */
+
+    document.getElementById(
+        "totalSales"
+    ).textContent =
+        money(totalSales);
+
+
+    document.getElementById(
+        "cashSales"
+    ).textContent =
+        money(cashSales);
+
+
+    document.getElementById(
+        "pochiSales"
+    ).textContent =
+        money(pochiSales);
+
+
+    document.getElementById(
+        "totalExpenses"
+    ).textContent =
+        money(totalExpenses);
+
+
+    document.getElementById(
+        "estimatedProfit"
+    ).textContent =
+        money(estimatedProfit);
+
+
+    document.getElementById(
+        "profitMargin"
+    ).textContent =
+        profitMargin.toFixed(1) +
+        "%";
+
+
+    document.getElementById(
+        "paidOrders"
+    ).textContent =
+        paidOrders.length;
+
+
+
+    /* =================================================
+       CASH POSITION
+    ================================================= */
+
+    const openingBalance =
+        getOpeningBalance();
+
+
+    const expectedCash =
+        openingBalance +
+        cashSales -
+        totalExpenses;
+
+
+    document.getElementById(
+        "openingBalance"
+    ).value =
+        openingBalance;
+
+
+    document.getElementById(
+        "cashPosition"
+    ).textContent =
+        money(cashSales);
+
+
+    document.getElementById(
+        "cashExpenses"
+    ).textContent =
+        money(totalExpenses);
+
+
+    document.getElementById(
+        "expectedCash"
+    ).textContent =
+        money(expectedCash);
+
+
+
+    /* =================================================
+       WORKERS
+    ================================================= */
+
+    const workers =
+        getData(WORKERS)
+            .filter(
+                worker =>
+                    worker.date === today()
+            );
+
+
+    const wagesPaid =
+        workers
+            .filter(
+                worker =>
+                    worker.status === "Paid"
+            )
+            .reduce(
+                (sum, worker) =>
+                    sum +
+                    Number(
+                        worker.wage || 0
+                    ),
+                0
+            );
+
+
+    const wagesPending =
+        workers
+            .filter(
+                worker =>
+                    worker.status === "Pending"
+            )
+            .reduce(
+                (sum, worker) =>
+                    sum +
+                    Number(
+                        worker.wage || 0
+                    ),
+                0
+            );
+
+
+    document.getElementById(
+        "workerCount"
+    ).textContent =
+        workers.length +
+        (
+            workers.length === 1
+                ? " worker"
+                : " workers"
+        );
+
+
+    document.getElementById(
+        "wagesPaid"
+    ).textContent =
+        money(wagesPaid);
+
+
+    document.getElementById(
+        "wagesPending"
+    ).textContent =
+        money(wagesPending);
+
+
+    const workersList =
+        document.getElementById(
+            "workersList"
+        );
+
+
+    workersList.innerHTML = "";
+
+
+    if (!workers.length) {
+
+        workersList.innerHTML = `
+            <p class="text-gray-400 text-sm">
+                No workers recorded today.
+            </p>
+        `;
+
+    } else {
+
+        workers
+            .slice()
+            .reverse()
+            .forEach(worker => {
+
+                const statusClass =
+                    worker.status === "Paid"
+                        ? "text-green-900"
+                        : "text-gray-500";
+
+
+                workersList.innerHTML += `
+
+                    <div class="border-b py-3 flex justify-between">
+
+                        <div>
+
+                            <p>
+                                ${escapeHTML(worker.name)}
+                            </p>
+
+                            <p class="text-xs text-gray-400 mt-1">
+                                ${escapeHTML(worker.status || "")}
+                            </p>
+
+                        </div>
+
+                        <div>
+
+                            ${money(worker.wage)}
+
+                            <span class="text-xs ml-2 ${statusClass}">
+                                ${escapeHTML(worker.status || "")}
+                            </span>
+
+                        </div>
+
                     </div>
-                    <div class="">
-  <h2 class="text-xl mb-4">Customer Orders</h2>
 
-<div class="overflow-x-auto">
-    <table class="bg-white rounded-lg overflow-hidden shadow">
-      
-    
-      <thead class="bg-gray-300 text-white">
-        <tr>
-          <th class="py-3 px-4 text-left">id</th>
-          <th class="py-3 px-4 text-left">date</th>
-          <th class="py-3 px-4 text-left">phone no.</th>
-          <th class="py-3 px-4 text-left">pickup</th>
-          <th class="py-3 px-4 text-left">order</th>
-          <th class="py-3 px-4 text-left">status</th>
-        </tr>
-      </thead>
+                `;
+
+            });
+
+    }
 
 
-      <tbody id="ordersTable"  class="text-gray-700 whitespace-nowrap">
-  
 
-      </tbody>
-    </table>
-  </div>
-</div>
-                </section>
-            </div>
+    /* =================================================
+       EXPENSE LIST
+    ================================================= */
 
-<!--analytics-->
+    const expensesList =
+        document.getElementById(
+            "expensesList"
+        );
 
-            <div id="analytics" class="page hidden pb-6 pt-12">
-                <section>
-                    <div class="bg-white p-6 rounded shadow mb-6">
-  <h2 class="text-gray-500 mb-4">Daily Stock Entry</h2>
 
-  <div class="grid md:grid-cols-2 gap-4">
-<input id="date" type="date"
-class="border p-2 rounded w-full outline-none">
-    <input id="product" type="text" placeholder="Product Name" class="border p-2 rounded w-full outline-none">
+    expensesList.innerHTML = "";
 
-<input id="opening" type="text" placeholder="Opening Stock" class="border p-2 rounded w-full outline-none">
 
-<input id="closing" type="text" placeholder="Closing Stock" class="border p-2 rounded w-full outline-none">
+    if (!todaysExpenses.length) {
 
-<input id="added" type="text" placeholder="added stock" class="border p-2 rounded w-full outline-none">
+        expensesList.innerHTML = `
+            <p class="text-gray-400 text-sm">
+                No expenses recorded today.
+            </p>
+        `;
 
-<input id="cost" type="number" placeholder="cost (KES)" class="border p-2 rounded w-full outline-none">
-  </div>
+    } else {
 
-  <button
-  class="mt-4 bg-gray-900 text-white px-4 py-2 rounded save-entry-button">
-    Save Entry
-  </button>
-</div>
+        todaysExpenses
+            .slice()
+            .reverse()
+            .forEach(expense => {
 
-<table class="min-w-full bg-white rounded shadow  overflow-x-auto whitespace-nowrap">
-  <thead class="bg-gray-300 text-white">
-    <tr>
-      <th class="py-2 px-4">Date</th>
-      <th class="py-2 px-4">Product</th>
-      <th class="py-2 px-4">Opening</th>
-      <th class="py-2 px-4">Closing</th>
-      <th class="py-2 px-4">added</th>
-      <th class="py-2 px-4">cost</th>
-      <th class="py-2 px-4">remove</th>
-    </tr>
-  </thead>
+                expensesList.innerHTML += `
 
-  <tbody id="stockTable" class="text-center">
-   
-    <tr class="border-b">
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-  </tbody>
-</table>
-                </section>
-                 <div class="hidden fixed inset-0 flex items-center justify-center bg-green-300/40 z-50 text-xl transition-all duration-500 ease-in div-container-error">
-     <div class="p-6 bg-white text-black transition-all duration-500 ease-in  div-container-display">Please enter size and color</div>
-  </div>
-            </div>
+                    <div class="border-b py-3 flex justify-between">
 
-            <!--ai suggestions-->
+                        <div>
 
-            <div id="ai" class="page hidden">
- <div class="bg-white p-6 rounded shadow mt-6">
-  <h2 class="text-lg mb-4">AI Business Insights</h2>
+                            <p>
+                                ${escapeHTML(expense.name)}
+                            </p>
 
-  <div id="aiOutput" class="text-gray-500 space-y-2">
-    <p>Click the button to generate insights...</p>
-  </div>
+                            <p class="text-xs text-gray-400 mt-1">
+                                ${escapeHTML(expense.time || "")}
+                            </p>
 
- <button 
-class="generate-ai-btn mt-4 bg-gray-600 text-white px-4 py-2 rounded">
-  Generate AI Insights
-</button>
-</div>
+                        </div>
 
-            </div>
-            
-        </main>
-    </div>
+                        <p>
+                            ${money(expense.amount)}
+                        </p>
+
+                    </div>
+
+                `;
+
+            });
+
+    }
+
+
+
+    /* =================================================
+       DEBTS
+    ================================================= */
+
+    const debts =
+        getData(DEBTS);
+
+
+    const pendingDebt =
+        debts
+            .filter(
+                debt =>
+                    debt.status === "Pending"
+            )
+            .reduce(
+                (sum, debt) =>
+                    sum +
+                    Number(
+                        debt.amount || 0
+                    ),
+                0
+            );
+
+
+    const paidDebt =
+        debts
+            .filter(
+                debt =>
+                    debt.status === "Paid"
+            )
+            .reduce(
+                (sum, debt) =>
+                    sum +
+                    Number(
+                        debt.amount || 0
+                    ),
+                0
+            );
+
+
+    document.getElementById(
+        "pendingDebt"
+    ).textContent =
+        money(pendingDebt);
+
+
+    document.getElementById(
+        "paidDebt"
+    ).textContent =
+        money(paidDebt);
+
+
+    const debtsList =
+        document.getElementById(
+            "debtsList"
+        );
+
+
+    debtsList.innerHTML = "";
+
+
+    if (!debts.length) {
+
+        debtsList.innerHTML = `
+            <p class="text-gray-400 text-sm">
+                No debts recorded.
+            </p>
+        `;
+
+    } else {
+
+        debts
+            .slice()
+            .reverse()
+            .forEach(debt => {
+
+                debtsList.innerHTML += `
+
+                    <div class="border-b py-3 flex justify-between">
+
+                        <div>
+
+                            <p>
+                                ${escapeHTML(debt.name)}
+                            </p>
+
+                            <p class="text-xs text-gray-400 mt-1">
+                                ${escapeHTML(debt.reason || "")}
+                            </p>
+
+                        </div>
+
+                        <div class="text-right">
+
+                            <p>
+                                ${money(debt.amount)}
+                            </p>
+
+                            <p class="text-xs mt-1">
+                                ${escapeHTML(debt.status || "")}
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            });
+
+    }
+
+
+
+    /* =================================================
+       PRODUCTION
+       
+       FIXED VERSION
+       
+       This section accepts both:
+       
+       product: "Chapati"
+       
+       and:
+       
+       product: {
+           name: "Chapati"
+       }
+       
+       It prevents [object Object] from
+       appearing in the Admin Dashboard.
+    ================================================= */
+
+
+    const productionData =
+        getData(PRODUCTION);
+
+
+
+    /*
+       Get the real product name.
+    */
+
+    function getProductName(item) {
+
+        if (!item) {
+
+            return "Unknown Product";
+
+        }
+
+
+        /*
+           Standard format:
+           
+           product: "Chapati"
+        */
+
+        if (
+            typeof item.product ===
+            "string"
+        ) {
+
+            return item.product;
+
+        }
+
+
+        /*
+           Product saved as an object.
+        */
+
+        if (
+            item.product &&
+            typeof item.product ===
+            "object"
+        ) {
+
+            return (
+                item.product.name ||
+                item.product.product ||
+                item.product.item ||
+                item.product.title ||
+                item.product.label ||
+                "Unknown Product"
+            );
+
+        }
+
+
+        /*
+           Alternative format:
+           
+           item: "Chapati"
+        */
+
+        if (
+            typeof item.item ===
+            "string"
+        ) {
+
+            return item.item;
+
+        }
+
+
+        /*
+           Item saved as an object.
+        */
+
+        if (
+            item.item &&
+            typeof item.item ===
+            "object"
+        ) {
+
+            return (
+                item.item.name ||
+                item.item.product ||
+                item.item.title ||
+                "Unknown Product"
+            );
+
+        }
+
+
+        return "Unknown Product";
+
+    }
+
+
+
+    /*
+       Today's production.
+    */
+
+    const production =
+        productionData.filter(
+            item =>
+                item.date === today()
+        );
+
+
+
+    /*
+       Total production.
+    */
+
+    const totalProduction =
+        production.reduce(
+            (sum, item) => {
+
+                return sum +
+                    Number(
+                        item.quantity ||
+                        item.qty ||
+                        0
+                    );
+
+            },
+            0
+        );
+
+
+
+    /*
+       Production display.
+    */
+
+    const productionList =
+        document.getElementById(
+            "productionList"
+        );
+
+
+    productionList.innerHTML = "";
+
+
+
+    /*
+       No production.
+    */
+
+    if (!production.length) {
+
+        productionList.innerHTML = `
+            <p class="text-gray-400 text-sm">
+                No production recorded today.
+            </p>
+        `;
+
+    }
+
+
+
+    /*
+       Display production.
+    */
+
+    else {
+
+        production
+            .slice()
+            .reverse()
+            .forEach(item => {
+
+
+                const productName =
+                    getProductName(item);
+
+
+                const quantity =
+                    Number(
+                        item.quantity ||
+                        item.qty ||
+                        0
+                    );
+
+
+                const unit =
+                    item.unit ||
+                    item.units ||
+                    "";
+
+
+                const time =
+                    item.time ||
+                    item.createdAt ||
+                    "";
+
+
+
+                /*
+                   Ingredients may be a string,
+                   array or object.
+                */
+
+                let ingredients =
+                    item.ingredients ||
+                    item.ingredient ||
+                    "";
+
+
+
+                /*
+                   Ingredients stored as array.
+                */
+
+                if (
+                    Array.isArray(
+                        ingredients
+                    )
+                ) {
+
+                    ingredients =
+                        ingredients
+                            .map(
+                                ingredient => {
+
+                                    if (
+                                        typeof ingredient ===
+                                        "string"
+                                    ) {
+
+                                        return ingredient;
+
+                                    }
+
+
+                                    if (
+                                        ingredient &&
+                                        typeof ingredient ===
+                                        "object"
+                                    ) {
+
+                                        return (
+                                            ingredient.name ||
+                                            ingredient.item ||
+                                            ingredient.product ||
+                                            ""
+                                        );
+
+                                    }
+
+
+                                    return "";
+
+                                }
+                            )
+                            .filter(Boolean)
+                            .join(", ");
+
+                }
+
+
+
+                /*
+                   Ingredients stored as object.
+                */
+
+                else if (
+                    ingredients &&
+                    typeof ingredients ===
+                    "object"
+                ) {
+
+                    ingredients =
+                        ingredients.name ||
+                        ingredients.item ||
+                        ingredients.product ||
+                        "";
+
+                }
+
+
+
+                /*
+                   Production row.
+                */
+
+                productionList.innerHTML += `
+
+                    <div class="border-b py-3">
+
+                        <div class="flex justify-between items-start gap-4">
+
+                            <div>
+
+                                <p class="text-gray-800">
+
+                                    ${escapeHTML(
+                                        productName
+                                    )}
+
+                                </p>
+
+                                <p class="text-xs text-gray-400 mt-1">
+
+                                    ${escapeHTML(
+                                        String(time)
+                                    )}
+
+                                </p>
+
+                            </div>
+
+
+                            <p class="text-right whitespace-nowrap">
+
+                                ${quantity}
+
+                                ${escapeHTML(
+                                    String(unit)
+                                )}
+
+                            </p>
+
+                        </div>
+
+
+                        ${
+                            ingredients
+                                ? `
+
+                                    <p class="text-xs text-gray-500 mt-2">
+
+                                        Ingredients:
+                                        ${escapeHTML(
+                                            String(
+                                                ingredients
+                                            )
+                                        )}
+
+                                    </p>
+
+                                  `
+                                : ""
+                        }
+
+                    </div>
+
+                `;
+
+            });
+
+    }
+
+
+
+    /* =================================================
+       WASTAGE
+    ================================================= */
+
+    const wastage =
+        getData(WASTAGE)
+            .filter(
+                item =>
+                    item.date === today()
+            );
+
+
+    const totalWastage =
+        wastage.reduce(
+            (sum, item) =>
+                sum +
+                Number(
+                    item.quantity || 0
+                ),
+            0
+        );
+
+
+    const wastageList =
+        document.getElementById(
+            "wastageList"
+        );
+
+
+    wastageList.innerHTML = "";
+
+
+    if (!wastage.length) {
+
+        wastageList.innerHTML = `
+            <p class="text-gray-400 text-sm">
+                No wastage recorded today.
+            </p>
+        `;
+
+    } else {
+
+        wastage
+            .slice()
+            .reverse()
+            .forEach(item => {
+
+                wastageList.innerHTML += `
+
+                    <div class="border-b py-3 flex justify-between">
+
+                        <div>
+
+                            <p>
+                                ${escapeHTML(item.item)}
+                            </p>
+
+                            <p class="text-xs text-gray-400 mt-1">
+                                ${escapeHTML(
+                                    item.reason ||
+                                    "No reason"
+                                )}
+                            </p>
+
+                        </div>
+
+                        <div>
+
+                            ${Number(
+                                item.quantity || 0
+                            )}
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            });
+
+    }
+
+
+
+    /* =================================================
+       STOCK ALERTS
+    ================================================= */
+
+    const stock =
+        getData(STOCK);
+
+
+    const stockBalances = {};
+
+
+
+    stock.forEach(item => {
+
+        const itemName =
+            typeof item.item === "string"
+                ? item.item
+                : (
+                    item.item?.name ||
+                    item.product?.name ||
+                    item.product ||
+                    "Unknown Item"
+                );
+
+
+        if (!stockBalances[itemName]) {
+
+            stockBalances[itemName] = {
+
+                quantity: 0,
+
+                unit:
+                    item.unit || ""
+
+            };
+
+        }
+
+
+        stockBalances[itemName].quantity +=
+            Number(
+                item.quantity || 0
+            );
+
+    });
+
+
+
+    wastage.forEach(item => {
+
+        const itemName =
+            typeof item.item === "string"
+                ? item.item
+                : (
+                    item.item?.name ||
+                    item.product?.name ||
+                    item.product ||
+                    "Unknown Item"
+                );
+
+
+        if (!stockBalances[itemName]) {
+
+            stockBalances[itemName] = {
+
+                quantity: 0,
+
+                unit:
+                    item.unit || ""
+
+            };
+
+        }
+
+
+        stockBalances[itemName].quantity -=
+            Number(
+                item.quantity || 0
+            );
+
+    });
+
+
+
+    const alerts =
+        Object.entries(
+            stockBalances
+        )
+        .filter(
+            ([item, data]) =>
+                data.quantity < 3
+        );
+
+
+
+    const stockAlerts =
+        document.getElementById(
+            "stockAlerts"
+        );
+
+
+    stockAlerts.innerHTML = "";
+
+
+
+    if (!alerts.length) {
+
+        stockAlerts.innerHTML = `
+            <p class="text-gray-400 text-sm">
+                No low-stock items.
+            </p>
+        `;
+
+    } else {
+
+        alerts.forEach(
+            ([item, data]) => {
+
+                const quantity =
+                    Math.max(
+                        0,
+                        data.quantity
+                    );
+
+
+                const status =
+                    quantity <= 0
+                        ? "OUT OF STOCK"
+                        : "LOW STOCK";
+
+
+                stockAlerts.innerHTML += `
+
+                    <div class="border-b py-3 flex justify-between">
+
+                        <div>
+
+                            <p>
+                                ${escapeHTML(item)}
+                            </p>
+
+                            <p class="text-xs text-gray-400 mt-1">
+                                ${status}
+                            </p>
+
+                        </div>
+
+                        <p>
+
+                            ${quantity}
+
+                            ${escapeHTML(
+                                data.unit
+                            )}
+
+                        </p>
+
+                    </div>
+
+                `;
+
+            }
+        );
+
+    }
+
+
+
+    /* =================================================
+       PERFORMANCE
+    ================================================= */
+
+    document.getElementById(
+        "performanceSales"
+    ).textContent =
+        money(totalSales);
+
+
+    document.getElementById(
+        "performanceExpenses"
+    ).textContent =
+        money(totalExpenses);
+
+
+    document.getElementById(
+        "performanceProfit"
+    ).textContent =
+        money(estimatedProfit);
+
+
+    document.getElementById(
+        "performanceMargin"
+    ).textContent =
+        profitMargin.toFixed(1) +
+        "%";
+
+
+    document.getElementById(
+        "performanceProduction"
+    ).textContent =
+        totalProduction;
+
+
+    document.getElementById(
+        "performanceWastage"
+    ).textContent =
+        totalWastage;
+
+
+
+    /* =================================================
+       PERFORMANCE MESSAGE
+    ================================================= */
+
+    const message =
+        document.getElementById(
+            "performanceMessage"
+        );
+
+
+    if (totalSales === 0) {
+
+        message.innerHTML = `
+
+            <span class="text-gray-500">
+
+                No sales have been recorded yet today.
+
+            </span>
+
+        `;
+
+    }
+
+
+    else if (
+        estimatedProfit < 0
+    ) {
+
+        message.innerHTML = `
+
+            <span>
+
+                Today's recorded expenses are higher
+                than today's sales. The business is
+                currently showing a loss based on the
+                simple sales-minus-expenses calculation.
+
+            </span>
+
+        `;
+
+    }
+
+
+    else if (
+        profitMargin < 10
+    ) {
+
+        message.innerHTML = `
+
+            <span>
+
+                Sales are currently above expenses,
+                but the estimated profit margin is low.
+                Review expenses and food production costs.
+
+            </span>
+
+        `;
+
+    }
+
+
+    else {
+
+        message.innerHTML = `
+
+            <span>
+
+                Today's recorded sales are currently
+                above recorded expenses.
+                Estimated profit is
+
+                ${money(
+                    estimatedProfit
+                )}
+
+                with a
+
+                ${profitMargin.toFixed(1)}%
+
+                margin.
+
+            </span>
+
+        `;
+
+    }
+
+}
+
+
+
+/* ================= START ================= */
+
+render();
+
+
+
+/*
+   Refresh automatically so the Admin Dashboard
+   sees changes from waiter, cashier and stock.
+*/
+
+setInterval(
+    render,
+    1500
+);
+
+
+</script>
 
 </body>
-
-
-<script type="module" src="admin/admin.js"></script>
 </html>

@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Serene Eatery | Waiter Dashboard</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        * {
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: 400 !important;
+        }
+
+        body {
+            background: #f3f4f6;
+            color: #222;
+        }
+
+        button,
+        select {
+            cursor: pointer;
+        }
+
+        input {
+            cursor: text;
+        }
+
+        .popup {
+            transform: translateY(-20px);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .popup.show {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal {
+            display: none;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .item-row {
+            transition: background 0.2s ease;
+        }
+
+        .item-row:hover {
+            background: #fafafa;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ================= HEADER ================= -->
+
+<header class="fixed top-0 left-0 w-full bg-white border-b border-gray-200 z-50">
+    <nav class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+
+        <a href="index.html"
+           class="text-xl text-green-900">
+            Serene Eatery
+        </a>
+
+      <div class="hidden md:flex gap-6 text-sm">
+
+    <a href="waiter.html" class="text-green-900 block">
+        Waiter
+    </a>
+
+    <a href="cashier.html" class="hover:text-green-900 transition">
+        Cashier
+    </a>
+
+    <a href="stock.html" class="hover:text-green-900 transition">
+        Stock
+    </a>
+
+    <a href="receipts.html" class="hover:text-green-900 transition">
+        Receipts
+    </a>
+
+    <a href="admin.html" class="hover:text-green-900 transition">
+        Admin
+    </a>
+
+</div>
+
+<!-- Cashier link for small devices -->
+<a href="cashier.html"
+   class="md:hidden fixed top-4 right-6 z-[60] text-sm text-green-900">
+    Cashier
+</a>
+    </nav>
+</header>
+
+
+<!-- ================= POPUP ================= -->
+
+<div id="popup"
+     class="popup fixed top-24 right-5 z-[100]">
+
+    <div class="bg-white border border-gray-300 shadow-xl p-5 w-[330px]">
+
+        <div class="flex gap-3">
+
+            <div id="popupIcon"
+                 class="text-green-900 text-xl">
+                ✓
+            </div>
+
+            <div>
+
+                <p id="popupTitle"
+                   class="text-sm">
+                    Notice
+                </p>
+
+                <p id="popupMessage"
+                   class="text-xs text-gray-500 mt-1">
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= CONFIRM MODAL ================= -->
+
+<div id="orderModal"
+     class="modal fixed inset-0 bg-black/40 z-[90] items-center justify-center p-5">
+
+    <div class="bg-white w-full max-w-4xl max-h-[90vh] overflow-y-auto p-6">
+
+        <div class="flex justify-between items-center">
+
+            <h2 class="text-xl">
+                Confirm Order
+            </h2>
+
+            <button onclick="closeOrderModal()"
+                    class="text-2xl text-gray-500 hover:text-black">
+                ×
+            </button>
+
+        </div>
+
+        <div id="orderPreview"
+             class="mt-6">
+        </div>
+
+        <div class="border-t border-gray-200 mt-6 pt-5 flex justify-end gap-3">
+
+            <button onclick="closeOrderModal()"
+                    class="border border-gray-300 px-5 py-3 hover:bg-gray-100">
+                Cancel
+            </button>
+
+            <button onclick="placeOrder()"
+                    class="bg-black text-white px-5 py-3 hover:bg-gray-800">
+                Place Order
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="max-w-7xl mx-auto px-6 pt-28 pb-16">
+
+
+    <!-- PAGE TITLE -->
+
+    <div class="mb-8">
+
+        <p class="text-xs tracking-widest text-green-900">
+            SERENE EATERY
+        </p>
+
+        <h1 class="text-3xl mt-2">
+            Waiter Dashboard
+        </h1>
+
+        <p class="text-gray-500 mt-2">
+            Place customer orders using currently available kitchen production.
+        </p>
+
+        <p id="todayDate"
+           class="text-xs text-gray-400 mt-2">
+        </p>
+
+    </div>
+<!-- ================= ADD PRODUCT ================= -->
+
+    <section class="bg-white border border-gray-200 p-6 mb-8">
+
+        <div class="flex justify-between items-center mb-6">
+
+            <div>
+
+                <h2 class="text-xl">
+                    Add Product
+                </h2>
+
+                <p class="text-sm text-gray-400 mt-1">
+                    Only products currently produced by the kitchen appear.
+                </p>
+
+            </div>
+
+            <button onclick="refreshWaiterStock()"
+                    class="border border-gray-300 px-4 py-2 text-sm hover:bg-gray-100 transition">
+                Refresh Stock
+            </button>
+
+        </div>
+
+
+        <div class="grid md:grid-cols-3 gap-5">
+
+
+            <!-- CATEGORY -->
+
+            <div>
+
+                <label class="text-xs text-gray-500">
+                    CATEGORY
+                </label>
+
+                <select id="categorySelect"
+                        onchange="loadProducts()"
+                        class="w-full border border-gray-300 p-3 mt-2 bg-white">
+
+                    <option value="">
+                        Select category
+                    </option>
+
+                    <option value="Snacks">
+                        Snacks
+                    </option>
+
+                    <option value="Beverages">
+                        Beverages
+                    </option>
+
+                    <option value="Food">
+                        Food
+                    </option>
+
+                    <option value="Drinks">
+                        Drinks
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- PRODUCT -->
+
+            <div>
+
+                <label class="text-xs text-gray-500">
+                    PRODUCT
+                </label>
+
+                <select id="productSelect"
+                        onchange="updateProductInfo()"
+                        class="w-full border border-gray-300 p-3 mt-2 bg-white">
+
+                    <option value="">
+                        Select category first
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- QTY -->
+
+            <div>
+
+                <label class="text-xs text-gray-500">
+                    QUANTITY
+                </label>
+
+                <input id="quantity"
+                       type="number"
+                       min="1"
+                       placeholder="Quantity"
+                       oninput="updateProductInfo()"
+                       class="w-full border border-gray-300 p-3 mt-2">
+
+            </div>
+
+        </div>
+
+
+        <!-- PRODUCT INFO -->
+
+        <div id="productInfo"
+             class="hidden border border-gray-200 mt-6 p-5">
+        </div>
+
+
+        <button onclick="addToCart()"
+                class="w-full bg-black text-white p-3 mt-6 hover:bg-gray-800 transition">
+
+            Add To Order
+
+        </button>
+
+    </section>
+
+
+    <!-- ================= CART ================= -->
+
+    <section class="bg-white border border-gray-200 p-6 mb-8">
+
+        <div class="flex justify-between items-center mb-6">
+
+            <div>
+
+                <h2 class="text-xl">
+                    Current Order
+                </h2>
+
+                <p class="text-sm text-gray-400 mt-1">
+                    You can update or remove products before placing the order.
+                </p>
+
+            </div>
+
+            <p id="cartCount"
+               class="text-sm text-gray-400">
+                0 items
+            </p>
+
+        </div>
+
+
+        <div id="cartContainer">
+        </div>
+
+
+        <div id="cartFooter"
+             class="hidden border-t border-gray-200 mt-6 pt-6">
+
+            <div class="flex justify-between items-center mb-5">
+
+                <p>
+                    Order Total
+                </p>
+
+                <p id="cartTotal"
+                   class="text-2xl">
+                    Ksh 0
+                </p>
+
+            </div>
+
+            <button onclick="openOrderConfirmation()"
+                    class="w-full bg-green-900 text-white p-4 hover:bg-green-800">
+
+                Review & Place Order
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+
+</main>
+
+
+<script>
+
+/* ========================================================
+   STORAGE KEYS
+======================================================== */
+
+const PRODUCTION_KEY = "serene_production";
+const ORDER_KEY = "serene_orders";
+
+
+/* ========================================================
+   MENU AND PRICES
+======================================================== */
+
+const MENU = {
+    Snacks: {
+        "Mandazi": 10, "Pancakes": 30, "Samosa Waru": 10, "Samosa Beef": 50, "Chapati": 30, "chapati brown": 40, "Smokie": 40, "Sausage": 60, "Bhajia": 50,"rolex": 90, "Smotcha": 70, "Sharwarma": 100, "Chips": 120, "Chips Masala": 150, "eggs": 30, "ommeletes": 80, "cassava": 50, "mayai": 100, "boiled eggs": 30, 
+    },
+    Beverages: {
+        "Tea": 20, "milk tea": 40, "Black Coffee": 40, "White Cofee": 60, "Black Chocolate": 60, "White Chocolate": 80, "Milk": 60, "Soup": 50, "chocolate": 40, "special tea": 30, "lemon tea": 60
+    },
+    Food: {
+        "Kamande": 70, "Rice": 60, "Minji": 70, "Njahi": 70, "Beans": 50, "beef" : 190, "beef plain": 200, "cabbage": 50,"greens": 50, "rice": 50, "matumbo": 80, "ugali": 50, "ndengu": 50 , "chicken": 60, "cabbage salad": 30, "chicken @ 70 ": 70, "mukimo": 100,"githeri": 100
+    },
+    Drinks: {
+        "Water Small": 30, "Water Big": 60, "Fanta Orange 350ml": 60, "Black Current 350ml": 60, "Stoney 350ml": 60, "Nuvida 350ml": 50, "Passion 350ml": 50, "Coke 350ml": 50, "Sprite 350ml": 50, "krest 350ml": 50, "Fanta Orange 300ml": 50, "Black Current 300ml": 50, "Stoney 300ml": 50, "Nuvida 300ml": 50, "passion 300ml": 50, "Coke 300ml": 50, "Sprite 300ml": 50, "krest 300ml": 50, "Fanta Orange 500ml": 80, "black current 500ml": 80, "Stoney 500ml": 80, "Nuvida 500ml": 80, "Passion 500ml": 80, "Coke 500ml": 80, "Sprite 500ml": 80, "krest 500ml": 80, "Fanta Orange 500ml Plastic": 90, "Black Current 500ml Plastic": 90, "Stoney 500ml Plastic": 90, "Nuvida 500ml Plastic": 90, "Passion 500ml Plastic": 90, "Coke 500ml Plastic": 90, "Sprite 500ml Plastic": 90, "Afia Small": 70, "Afia Big": 100, "Greens": 50,"sugarcane": 70,"passion": 70,"mango": 70,"mango big": 100, "passion big": 100,"nuvida": 60, "krest 500ml": 80,
+        "cocktail": 100, "pineaple": 70
+        
+    }
+};
+
+/* ========================================================
+   CART
+======================================================== */
+let cart = [];
+
+/* ========================================================
+   HELPERS
+======================================================== */
+function getData(key) {
+    try {
+        const data = localStorage.getItem(key);
+        if (!data) return [];
+        return JSON.parse(data);
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
+}
+
+function saveData(key, data) {
+    localStorage.setItem(key, JSON.stringify(data));
+}
+
+function money(amount) {
+    return "Ksh " + Number(amount || 0).toLocaleString();
+}
+
+function generateID() {
+    return Date.now() + "-" + Math.random().toString(36).substring(2, 9);
+}
+
+function nowDate() {
+    return new Date().toLocaleDateString();
+}
+
+function nowTime() {
+    return new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+}
+
+function escapeHTML(value) {
+    const div = document.createElement("div");
+    div.textContent = value ?? "";
+    return div.innerHTML;
+}
+
+/* ========================================================
+   POPUP
+======================================================== */
+let popupTimer;
+function showPopup(title, message, error = false) {
+    const popup = document.getElementById("popup");
+    document.getElementById("popupTitle").textContent = title;
+    document.getElementById("popupMessage").textContent = message;
+    document.getElementById("popupIcon").textContent = error ? "×" : "✓";
+    
+    popup.classList.add("show");
+    clearTimeout(popupTimer);
+    
+    popupTimer = setTimeout(function() {
+        popup.classList.remove("show");
+    }, 3500);
+}
+
+/* ========================================================
+   PRODUCTION
+======================================================== */
+function getProduction() {
+    return getData(PRODUCTION_KEY);
+}
+
+/* ========================================================
+   CALCULATE AVAILABLE STOCK
+   TOTAL PRODUCTION MINUS ONLY "PENDING" ORDERS.
+======================================================== */
+function getProductionBalances() {
+    const production = getProduction();
+    const balances = {};
+
+    /* -------------------------------
+       ADD EVERYTHING PRODUCED (and negative sales)
+    ------------------------------- */
+    production.forEach(function(record) {
+        const product = record.product || record.name || record.item;
+        if (!product) return;
+        
+        const key = String(product).trim().toLowerCase();
+        const quantity = Number(record.quantity ?? record.qty ?? record.produced ?? record.amount ?? 0);
+        
+        if (!balances[key]) {
+            balances[key] = { product: product, quantity: 0 };
+        }
+        
+        balances[key].quantity += quantity;
+    });
+
+    /* -------------------------------
+       SUBTRACT ONLY PLACED/PENDING ORDERS
+       Once an order is paid, the cashier pushes a negative record to 
+       production above, so we don't subtract it again here!
+    ------------------------------- */
+    const orders = getData(ORDER_KEY);
+    
+    orders.forEach(function(order) {
+        const status = String(order.status || order.paymentStatus || "").toLowerCase();
+        
+        // ONLY subtract if it hasn't been officially paid and deducted by Cashier yet
+        if (status !== "placed" && status !== "pending") {
+            return;
+        }
+
+        const products = order.products || order.items || [];
+        
+        products.forEach(function(item) {
+            const product = item.product || item.name || item.item;
+            if (!product) return;
+            
+            const key = String(product).trim().toLowerCase();
+            const quantity = Number(item.quantity ?? item.qty ?? 0);
+            
+            if (balances[key]) {
+                balances[key].quantity -= quantity;
+            }
+        });
+    });
+
+    /* -------------------------------
+       NO NEGATIVE STOCK
+    ------------------------------- */
+    Object.keys(balances).forEach(function(key) {
+        balances[key].quantity = Math.max(0, balances[key].quantity);
+    });
+
+    return balances;
+}
+
+/* ========================================================
+   PRODUCT STOCK
+======================================================== */
+function getProductStock(product) {
+    const balances = getProductionBalances();
+    const key = String(product).trim().toLowerCase();
+    if (!balances[key]) return 0;
+    return Number(balances[key].quantity);
+}
+
+/* ========================================================
+   AVAILABLE PRODUCTS
+======================================================== */
+function getAvailableProducts(category) {
+    const menu = MENU[category] || {};
+    const products = [];
+    
+    Object.keys(menu).forEach(function(product) {
+        const stock = getProductStock(product);
+        if (stock > 0) {
+            products.push({
+                product: product,
+                price: menu[product],
+                stock: stock
+            });
+        }
+    });
+    
+    return products;
+}
+
+/* ========================================================
+   LOAD PRODUCTS
+======================================================== */
+function loadProducts() {
+    const category = document.getElementById("categorySelect").value;
+    const select = document.getElementById("productSelect");
+    
+    select.innerHTML = `<option value="">Select product</option>`;
+    document.getElementById("productInfo").classList.add("hidden");
+    
+    if (!category) return;
+    
+    const products = getAvailableProducts(category);
+    if (!products.length) {
+        select.innerHTML = `<option value="">No products currently available</option>`;
+        return;
+    }
+    
+    products.forEach(function(item) {
+        const option = document.createElement("option");
+        option.value = item.product;
+        option.textContent = `${item.product} | ${money(item.price)} | ${item.stock} left`;
+        select.appendChild(option);
+    });
+}
+
+/* ========================================================
+   PRODUCT INFO
+======================================================== */
+function updateProductInfo() {
+    const category = document.getElementById("categorySelect").value;
+    const product = document.getElementById("productSelect").value;
+    const quantity = Number(document.getElementById("quantity").value || 0);
+    const info = document.getElementById("productInfo");
+
+    if (!category || !product) {
+        info.classList.add("hidden");
+        return;
+    }
+
+    const price = MENU[category][product];
+    const stock = getProductStock(product);
+    const remaining = Math.max(0, stock - quantity);
+
+    info.classList.remove("hidden");
+
+    info.innerHTML = `
+        <div class="grid md:grid-cols-4 gap-5">
+            <div>
+                <p class="text-xs text-gray-400">PRICE</p>
+                <p class="mt-2">${money(price)}</p>
+            </div>
+
+            <div>
+                <p class="text-xs text-gray-400">AVAILABLE BEFORE ORDER</p>
+                <p class="mt-2">${stock}</p>
+            </div>
+
+            <div>
+                <p class="text-xs text-gray-400">REQUESTED</p>
+                <p class="mt-2">${quantity}</p>
+            </div>
+
+            <div>
+                <p class="text-xs text-gray-400">REMAINING AFTER ORDER</p>
+                <p class="mt-2">${remaining}</p>
+            </div>
+        </div>
+    `;
+}
+/* ========================================================
+   ADD TO CART
+======================================================== */
+function addToCart() {
+    const category = document.getElementById("categorySelect").value;
+    const product = document.getElementById("productSelect").value;
+    const quantity = Number(document.getElementById("quantity").value);
+
+    if (!category) { showPopup("Category missing", "Please select a category.", true); return; }
+    if (!product) { showPopup("Product missing", "Please select a product.", true); return; }
+    if (!Number.isInteger(quantity) || quantity <= 0) { showPopup("Quantity missing", "Please enter a valid quantity.", true); return; }
+
+    const stock = getProductStock(product);
+    const alreadyInCart = cart.filter(item => item.product === product).reduce((total, item) => total + item.quantity, 0);
+
+    if (quantity + alreadyInCart > stock) {
+        showPopup("Not enough stock", `Only ${stock - alreadyInCart} ${product} remain available for this order.`, true);
+        return;
+    }
+
+    const price = MENU[category][product];
+    
+    cart.push({
+        id: generateID(),
+        category: category,
+        product: product,
+        quantity: quantity,
+        price: price,
+        total: quantity * price,
+        stockBeforeOrder: stock
+    });
+    
+    renderCart();
+    
+    document.getElementById("productSelect").value = "";
+    document.getElementById("quantity").value = "";
+    document.getElementById("productInfo").classList.add("hidden");
+    
+    showPopup("Added to order", `${quantity} ${product} added.`);
+}
+
+/* ========================================================
+   RENDER CART
+======================================================== */
+function renderCart() {
+    const container = document.getElementById("cartContainer");
+    const footer = document.getElementById("cartFooter");
+    
+    container.innerHTML = "";
+    document.getElementById("cartCount").textContent = `${cart.length} ${cart.length === 1 ? "item" : "items"}`;
+    
+    if (!cart.length) {
+        footer.classList.add("hidden");
+        container.innerHTML = `
+            <div class="text-center py-10">
+                <p class="text-gray-400">No products added to this order.</p>
+            </div>
+        `;
+        return;
+    }
+    
+    footer.classList.remove("hidden");
+    let total = 0;
+    
+    cart.forEach(function(item, index) {
+        total += item.total;
+        container.innerHTML += `
+            <div class="item-row border-b border-gray-200 py-5">
+                <div class="grid md:grid-cols-6 gap-4 items-center">
+                    <div>
+                        <p class="text-xs text-gray-400">CATEGORY</p>
+                        <p class="mt-1">${escapeHTML(item.category)}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400">PRODUCT</p>
+                        <p class="mt-1">${escapeHTML(item.product)}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400">QUANTITY</p>
+                        <input type="number" min="1" value="${item.quantity}" onchange="updateCartQuantity(${index}, this.value)" class="border border-gray-300 p-2 w-20 mt-1">
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400">PRICE</p>
+                        <p class="mt-1">${money(item.price)}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400">TOTAL</p>
+                        <p class="mt-1">${money(item.total)}</p>
+                    </div>
+                    <div class="text-right">
+                        <button onclick="removeFromCart(${index})" class="text-sm text-gray-500 hover:text-black">Remove</button>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    document.getElementById("cartTotal").textContent = money(total);
+}
+
+/* ========================================================
+   UPDATE CART QUANTITY
+======================================================== */
+function updateCartQuantity(index, value) {
+    const quantity = Number(value);
+    const item = cart[index];
+    
+    if (!item) return;
+    if (!Number.isInteger(quantity) || quantity <= 0) {
+        showPopup("Invalid quantity", "Quantity must be at least 1.", true);
+        renderCart();
+        return;
+    }
+    
+    const stock = getProductStock(item.product);
+    const otherQuantity = cart.filter((cartItem, i) => i !== index && cartItem.product === item.product).reduce((total, cartItem) => total + cartItem.quantity, 0);
+    
+    if (quantity + otherQuantity > stock) {
+        showPopup("Not enough stock", `Only ${stock - otherQuantity} more ${item.product} can be ordered.`, true);
+        renderCart();
+        return;
+    }
+    
+    item.quantity = quantity;
+    item.total = quantity * item.price;
+    renderCart();
+}
+
+/* ========================================================
+   REMOVE CART ITEM
+======================================================== */
+function removeFromCart(index) {
+    const product = cart[index].product;
+    cart.splice(index, 1);
+    renderCart();
+    showPopup("Removed", `${product} removed from the order.`);
+}
+
+/* ========================================================
+   VALIDATE ORDER
+======================================================== */
+function validateOrder() {
+    if (!cart.length) { showPopup("Order empty", "Add at least one product.", true); return false; }
+
+    const grouped = {};
+    cart.forEach(function(item) {
+        if (!grouped[item.product]) grouped[item.product] = 0;
+        grouped[item.product] += item.quantity;
+    });
+
+    for (const product in grouped) {
+        const stock = getProductStock(product);
+        if (grouped[product] > stock) {
+            showPopup("Stock changed", `Only ${stock} ${product} remain.`, true);
+            return false;
+        }
+    }
+    return true;
+}
+
+/* ========================================================
+   ORDER CONFIRMATION
+======================================================== */
+function openOrderConfirmation() {
+    if (!validateOrder()) return;
+
+    const total = cart.reduce((sum, item) => sum + item.total, 0);
+
+    let html = `
+        <div class="border border-gray-200 p-5">
+            <div class="grid md:grid-cols-2 gap-5 mb-6">
+                <div><p class="text-xs text-gray-400">DATE</p><p class="mt-2">${nowDate()}</p></div>
+                <div><p class="text-xs text-gray-400">TIME</p><p class="mt-2">${nowTime()}</p></div>
+            </div>
+            <div class="border-t border-gray-200">
+    `;
+
+    cart.forEach(function(item) {
+        const currentStock = getProductStock(item.product);
+        const afterOrder = currentStock - item.quantity;
+        html += `
+            <div class="grid md:grid-cols-6 gap-4 py-4 border-b border-gray-100">
+                <div><p class="text-xs text-gray-400">CATEGORY</p><p class="mt-1">${escapeHTML(item.category)}</p></div>
+                <div><p class="text-xs text-gray-400">PRODUCT</p><p class="mt-1">${escapeHTML(item.product)}</p></div>
+                <div><p class="text-xs text-gray-400">QTY</p><p class="mt-1">${item.quantity}</p></div>
+                <div><p class="text-xs text-gray-400">BEFORE</p><p class="mt-1">${currentStock}</p></div>
+                <div><p class="text-xs text-gray-400">AFTER</p><p class="mt-1">${afterOrder}</p></div>
+                <div><p class="text-xs text-gray-400">TOTAL</p><p class="mt-1">${money(item.total)}</p></div>
+            </div>
+        `;
+    });
+
+    html += `
+            </div>
+            <div class="flex justify-between mt-6">
+                <p class="text-lg">TOTAL</p>
+                <p class="text-2xl">${money(total)}</p>
+            </div>
+        </div>
+    `;
+
+    document.getElementById("orderPreview").innerHTML = html;
+    document.getElementById("orderModal").classList.add("show");
+}
+
+/* ========================================================
+   CLOSE MODAL
+======================================================== */
+function closeOrderModal() {
+    document.getElementById("orderModal").classList.remove("show");
+}
+
+/* ========================================================
+   PLACE ORDER
+======================================================== */
+function placeOrder() {
+    if (!validateOrder()) { closeOrderModal(); return; }
+
+    const total = cart.reduce((sum, item) => sum + item.total, 0);
+    
+    const products = cart.map(function(item) {
+        const before = getProductStock(item.product);
+        return {
+            category: item.category,
+            product: item.product,
+            quantity: item.quantity,
+            price: item.price,
+            total: item.total,
+            stockBeforeOrder: before,
+            stockAfterOrder: Math.max(0, before - item.quantity)
+        };
+    });
+
+    const order = {
+        id: generateID(),
+        orderNumber: "ORD-" + Date.now(),
+        products: products,
+        total: total,
+        status: "pending", // Used by cashier and receipt
+        paymentStatus: "pending",
+        paymentMethod: null,
+        date: nowDate(),
+        time: nowTime(),
+        createdAt: new Date().toISOString()
+    };
+
+    const orders = getData(ORDER_KEY);
+    orders.push(order);
+    saveData(ORDER_KEY, orders);
+
+    cart = [];
+    renderCart();
+    
+    document.getElementById("categorySelect").value = "";
+    document.getElementById("productSelect").innerHTML = `<option value="">Select category first</option>`;
+    document.getElementById("quantity").value = "";
+    document.getElementById("productInfo").classList.add("hidden");
+    
+    closeOrderModal();
+    renderProduction();
+    
+    showPopup("Order placed", `${order.orderNumber} has been sent to the cashier and stock has been updated.`);
+}
+
+/* ========================================================
+   RENDER AVAILABLE PRODUCTION
+======================================================== */
+function renderProduction() {
+    const container = document.getElementById("productionContainer");
+    const balances = getProductionBalances();
+    const products = Object.values(balances).sort((a, b) => a.product.localeCompare(b.product));
+    
+    container.innerHTML = "";
+    if (!products.length) {
+        container.innerHTML = `
+            <div class="text-center py-10">
+                <p class="text-gray-400">No kitchen production available.</p>
+            </div>
+        `;
+        return;
+    }
+    
+    products.forEach(function(item) {
+        const lowStock = item.quantity > 0 && item.quantity < 3;
+        const finished = item.quantity <= 0;
+        container.innerHTML += `
+            <div class="border-b border-gray-200 py-4 flex justify-between items-center">
+                <div>
+                    <p>${escapeHTML(item.product)}</p>
+                    <p class="text-xs text-gray-400 mt-1">${finished ? "Out of stock" : lowStock ? "Running out" : "Available"}</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-xl">${item.quantity}</p>
+                    <p class="text-xs text-gray-400">remaining</p>
+                </div>
+            </div>
+        `;
+    });
+}
+
+/* ========================================================
+   MANUAL REFRESH
+======================================================== */
+function refreshWaiterStock() {
+    renderProduction();
+    const category = document.getElementById("categorySelect").value;
+    if (category) loadProducts();
+    showPopup("Stock updated", "The latest available kitchen production has been loaded.");
+}
+
+/* ========================================================
+   DATE
+======================================================== */
+document.getElementById("todayDate").textContent = new Date().toLocaleDateString(undefined, { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+
+/* ========================================================
+   CROSS-TAB AUTO REFRESH
+======================================================== */
+window.addEventListener("storage", function() {
+    renderProduction();
+});
+
+/* ========================================================
+   INITIAL LOAD
+======================================================== */
+renderCart();
+renderProduction();
+
+</script>
+
+</body>
+</html>
