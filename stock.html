@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
+
         * {
             font-family: Arial, Helvetica, sans-serif;
             font-weight: 400 !important;
@@ -22,6 +24,10 @@
         button,
         a {
             cursor: pointer;
+        }
+
+        button {
+            touch-action: manipulation;
         }
 
         .toast {
@@ -40,10 +46,13 @@
         .modal.show {
             display: flex;
         }
+
     </style>
+
 </head>
 
 <body>
+
 
 <!-- =====================================================
      FIXED NAVIGATION
@@ -91,11 +100,13 @@
 </header>
 
 
+
 <!-- =====================================================
      TOAST
 ===================================================== -->
 
-<div id="toast" class="toast fixed top-24 right-5 z-[100]">
+<div id="toast"
+     class="toast fixed top-24 right-5 z-[100]">
 
     <div class="bg-white border border-gray-300 shadow-lg p-5 min-w-[320px]">
 
@@ -124,6 +135,7 @@
     </div>
 
 </div>
+
 
 
 <!-- =====================================================
@@ -167,13 +179,17 @@
 </div>
 
 
+
 <!-- =====================================================
      MAIN
 ===================================================== -->
 
 <main class="max-w-7xl mx-auto px-6 pt-28 pb-16">
 
-    <!-- TITLE -->
+
+    <!-- =================================================
+         TITLE
+    ================================================== -->
 
     <div class="mb-8">
 
@@ -196,11 +212,13 @@
     </div>
 
 
+
     <!-- =================================================
          SUMMARY
     ================================================== -->
 
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+
 
         <div class="bg-white border border-gray-200 p-5">
 
@@ -260,6 +278,7 @@
     </div>
 
 
+
     <!-- =================================================
          STOCK IN
     ================================================== -->
@@ -279,52 +298,68 @@
         </div>
 
 
-        <div class="grid md:grid-cols-5 gap-3">
+        <!--
+            IMPORTANT:
+            This is now a real form so mobile browsers
+            handle the submission correctly.
+        -->
+
+        <form id="stockForm"
+              class="grid md:grid-cols-5 gap-3">
 
             <input
                 id="itemName"
                 type="text"
                 placeholder="Product e.g. Unga"
-                class="border border-gray-300 p-3 outline-none focus:border-gray-600"
+                autocomplete="off"
+                class="border border-gray-300 p-3 outline-none focus:border-gray-600 w-full"
             >
+
 
             <input
                 id="quantity"
                 type="number"
                 min="0"
                 step="0.01"
+                inputmode="decimal"
                 placeholder="Quantity"
-                class="border border-gray-300 p-3 outline-none focus:border-gray-600"
+                class="border border-gray-300 p-3 outline-none focus:border-gray-600 w-full"
             >
+
 
             <input
                 id="unit"
                 type="text"
                 placeholder="Unit e.g. packet"
-                class="border border-gray-300 p-3 outline-none focus:border-gray-600"
+                autocomplete="off"
+                class="border border-gray-300 p-3 outline-none focus:border-gray-600 w-full"
             >
+
 
             <input
                 id="cost"
                 type="number"
                 min="0"
                 step="0.01"
+                inputmode="decimal"
                 placeholder="Cost Ksh"
-                class="border border-gray-300 p-3 outline-none focus:border-gray-600"
+                class="border border-gray-300 p-3 outline-none focus:border-gray-600 w-full"
             >
 
+
             <button
-                type="button"
-                onclick="addStock()"
-                class="bg-black text-white p-3 hover:bg-gray-800 transition">
+                id="addStockButton"
+                type="submit"
+                class="bg-black text-white p-3 hover:bg-gray-800 active:bg-gray-900 transition w-full">
 
                 Add Stock
 
             </button>
 
-        </div>
+        </form>
 
     </section>
+
 
 
     <!-- =================================================
@@ -347,12 +382,13 @@
 
             </div>
 
+
             <input
                 id="search"
                 type="text"
                 oninput="render()"
                 placeholder="Search stock..."
-                class="border border-gray-300 p-3 text-sm outline-none"
+                class="border border-gray-300 p-3 text-sm outline-none w-full md:w-auto"
             >
 
         </div>
@@ -363,6 +399,7 @@
         </div>
 
     </section>
+
 
 
     <!-- =================================================
@@ -385,8 +422,6 @@
         </div>
 
 
-        <!-- PRODUCT -->
-
         <div class="grid md:grid-cols-4 gap-3">
 
             <input
@@ -396,13 +431,16 @@
                 class="border border-gray-300 p-3 outline-none focus:border-gray-600"
             >
 
+
             <input
                 id="productionQuantity"
                 type="number"
                 min="1"
+                inputmode="numeric"
                 placeholder="Quantity produced"
                 class="border border-gray-300 p-3 outline-none focus:border-gray-600"
             >
+
 
             <input
                 id="productionUnit"
@@ -411,16 +449,18 @@
                 class="border border-gray-300 p-3 outline-none focus:border-gray-600"
             >
 
+
             <button
                 type="button"
                 onclick="addProduction()"
-                class="bg-green-900 text-white p-3 hover:bg-green-800 transition">
+                class="bg-green-900 text-white p-3 hover:bg-green-800 active:bg-green-950 transition">
 
                 Record Production
 
             </button>
 
         </div>
+
 
 
         <!-- INGREDIENTS -->
@@ -442,19 +482,23 @@
                         class="ingredient-name border border-gray-300 p-3 outline-none"
                     >
 
+
                     <input
                         type="number"
                         min="0"
                         step="0.01"
+                        inputmode="decimal"
                         placeholder="Quantity used"
                         class="ingredient-quantity border border-gray-300 p-3 outline-none"
                     >
+
 
                     <input
                         type="text"
                         placeholder="Unit e.g. packets"
                         class="ingredient-unit border border-gray-300 p-3 outline-none"
                     >
+
 
                     <button
                         type="button"
@@ -484,6 +528,7 @@
     </section>
 
 
+
     <!-- =================================================
          FINISHED PRODUCTS
     ================================================== -->
@@ -508,6 +553,7 @@
     </section>
 
 
+
     <!-- =================================================
          WARNINGS
     ================================================== -->
@@ -526,6 +572,7 @@
         </div>
 
     </section>
+
 
 
     <!-- =================================================
@@ -554,6 +601,7 @@
 </main>
 
 
+
 <script>
 
 /* =====================================================
@@ -570,6 +618,7 @@ const STOCK_KEY = "serene_stock";
 const PRODUCTION_KEY = "serene_production";
 
 
+
 /* =====================================================
    GET STOCK
 ===================================================== */
@@ -578,13 +627,15 @@ function getStock() {
 
     try {
 
-        const data = localStorage.getItem(STOCK_KEY);
+        const data =
+            localStorage.getItem(STOCK_KEY);
 
         if (!data) {
             return [];
         }
 
-        const parsed = JSON.parse(data);
+        const parsed =
+            JSON.parse(data);
 
         return Array.isArray(parsed)
             ? parsed
@@ -592,13 +643,14 @@ function getStock() {
 
     } catch (error) {
 
-        console.error(error);
+        console.error("Stock error:", error);
 
         return [];
 
     }
 
 }
+
 
 
 /* =====================================================
@@ -619,6 +671,7 @@ function saveStock(stock) {
 }
 
 
+
 /* =====================================================
    GET PRODUCTION
 ===================================================== */
@@ -628,9 +681,7 @@ function getProduction() {
     try {
 
         const data =
-            localStorage.getItem(
-                PRODUCTION_KEY
-            );
+            localStorage.getItem(PRODUCTION_KEY);
 
         if (!data) {
             return [];
@@ -645,13 +696,14 @@ function getProduction() {
 
     } catch (error) {
 
-        console.error(error);
+        console.error("Production error:", error);
 
         return [];
 
     }
 
 }
+
 
 
 /* =====================================================
@@ -670,6 +722,7 @@ function saveProduction(data) {
     );
 
 }
+
 
 
 /* =====================================================
@@ -691,6 +744,7 @@ function createID() {
 }
 
 
+
 /* =====================================================
    DATE
 ===================================================== */
@@ -709,24 +763,37 @@ function getDate() {
 }
 
 
+
+/* =====================================================
+   DATE KEY
+===================================================== */
+
 function getDateKey() {
 
     const now = new Date();
 
     return (
-        now.getFullYear() +
-        "-" +
-        String(now.getMonth() + 1).padStart(2, "0") +
-        "-" +
+        now.getFullYear()
+        +
+        "-"
+        +
+        String(now.getMonth() + 1).padStart(2, "0")
+        +
+        "-"
+        +
         String(now.getDate()).padStart(2, "0")
     );
 
 }
 
 
+
 /* =====================================================
    TIME
-   FIX: This function was missing.
+
+   THIS WAS MISSING IN YOUR ORIGINAL CODE.
+   addStock(), increaseStock(), decreaseStock()
+   and production all use getTime().
 ===================================================== */
 
 function getTime() {
@@ -735,16 +802,23 @@ function getTime() {
         undefined,
         {
             hour: "2-digit",
-            minute: "2-digit"
+            minute: "2-digit",
+            second: "2-digit"
         }
     );
 
 }
 
 
+
+/* =====================================================
+   FORMAT NUMBER
+===================================================== */
+
 function formatNumber(value) {
 
-    const number = Number(value || 0);
+    const number =
+        Number(value || 0);
 
     if (!Number.isFinite(number)) {
         return "0";
@@ -760,19 +834,26 @@ function formatNumber(value) {
 }
 
 
+
+/* =====================================================
+   RECORD DATE LABEL
+===================================================== */
+
 function getRecordDateLabel(record) {
 
     if (record.dateKey) {
 
-        const parts = String(record.dateKey).split("-");
+        const parts =
+            String(record.dateKey).split("-");
 
         if (parts.length === 3) {
 
-            const date = new Date(
-                Number(parts[0]),
-                Number(parts[1]) - 1,
-                Number(parts[2])
-            );
+            const date =
+                new Date(
+                    Number(parts[0]),
+                    Number(parts[1]) - 1,
+                    Number(parts[2])
+                );
 
             if (!Number.isNaN(date.getTime())) {
 
@@ -796,15 +877,25 @@ function getRecordDateLabel(record) {
 }
 
 
+
+/* =====================================================
+   DATE GROUP KEY
+===================================================== */
+
 function getDateGroupKey(record) {
 
     if (record.dateKey) {
+
         return String(record.dateKey);
+
     }
 
-    return String(record.date || "Unknown date");
+    return String(
+        record.date || "Unknown date"
+    );
 
 }
+
 
 
 /* =====================================================
@@ -814,7 +905,8 @@ function getDateGroupKey(record) {
 function money(value) {
 
     return (
-        "Ksh " +
+        "Ksh "
+        +
         Number(value || 0)
             .toLocaleString(
                 undefined,
@@ -825,6 +917,7 @@ function money(value) {
     );
 
 }
+
 
 
 /* =====================================================
@@ -842,6 +935,7 @@ function escapeHTML(value) {
     return div.innerHTML;
 
 }
+
 
 
 /* =====================================================
@@ -899,15 +993,14 @@ function showToast(
         setTimeout(
             function() {
 
-                toast.classList.remove(
-                    "show"
-                );
+                toast.classList.remove("show");
 
             },
             3500
         );
 
 }
+
 
 
 /* =====================================================
@@ -962,6 +1055,7 @@ function openConfirm(
 }
 
 
+
 /* =====================================================
    CLOSE CONFIRM
 ===================================================== */
@@ -977,11 +1071,17 @@ function closeConfirm() {
 }
 
 
+
 /* =====================================================
    ADD STOCK
 ===================================================== */
 
-function addStock() {
+function addStock(event) {
+
+    if (event) {
+        event.preventDefault();
+    }
+
 
     const item =
         document.getElementById(
@@ -1019,6 +1119,10 @@ function addStock() {
             "error"
         );
 
+        document.getElementById(
+            "itemName"
+        ).focus();
+
         return;
 
     }
@@ -1035,6 +1139,10 @@ function addStock() {
             "error"
         );
 
+        document.getElementById(
+            "quantity"
+        ).focus();
+
         return;
 
     }
@@ -1047,6 +1155,10 @@ function addStock() {
             "Enter the unit.",
             "error"
         );
+
+        document.getElementById(
+            "unit"
+        ).focus();
 
         return;
 
@@ -1063,6 +1175,10 @@ function addStock() {
             "Cost cannot be negative.",
             "error"
         );
+
+        document.getElementById(
+            "cost"
+        ).focus();
 
         return;
 
@@ -1097,6 +1213,7 @@ function addStock() {
 
 
     saveStock(stock);
+
 
     localStorage.removeItem(
         "serene_warning_hidden_" +
@@ -1135,6 +1252,7 @@ function addStock() {
 }
 
 
+
 /* =====================================================
    CALCULATE RAW STOCK
 ===================================================== */
@@ -1143,7 +1261,6 @@ function calculateBalances() {
 
     const records =
         getStock();
-
 
     const balances = {};
 
@@ -1213,6 +1330,7 @@ function calculateBalances() {
 }
 
 
+
 /* =====================================================
    GET AVAILABLE STOCK
 ===================================================== */
@@ -1239,6 +1357,7 @@ function getAvailableStock(item) {
 }
 
 
+
 /* =====================================================
    GET UNIT
 ===================================================== */
@@ -1261,6 +1380,7 @@ function getItemUnit(item) {
     );
 
 }
+
 
 
 /* =====================================================
@@ -1333,6 +1453,7 @@ function increaseStock(item) {
 
     saveStock(stock);
 
+
     localStorage.removeItem(
         "serene_warning_hidden_" +
         item.toLowerCase()
@@ -1348,6 +1469,7 @@ function increaseStock(item) {
     );
 
 }
+
 
 
 /* =====================================================
@@ -1462,6 +1584,7 @@ function decreaseStock(item) {
 }
 
 
+
 /* =====================================================
    REMOVE ITEM FROM ACTIVE VIEW
 ===================================================== */
@@ -1498,6 +1621,7 @@ function removeItem(item) {
 }
 
 
+
 /* =====================================================
    RESTORE ITEM
 ===================================================== */
@@ -1519,6 +1643,7 @@ function restoreItem(item) {
     );
 
 }
+
 
 
 /* =====================================================
@@ -1598,6 +1723,7 @@ function deleteRecord(id) {
 }
 
 
+
 /* =====================================================
    ADD INGREDIENT ROW
 ===================================================== */
@@ -1632,6 +1758,7 @@ function addIngredientRow() {
             type="number"
             min="0"
             step="0.01"
+            inputmode="decimal"
             placeholder="Quantity used"
             class="ingredient-quantity border border-gray-300 p-3 outline-none"
         >
@@ -1657,6 +1784,7 @@ function addIngredientRow() {
     container.appendChild(row);
 
 }
+
 
 
 /* =====================================================
@@ -1691,6 +1819,7 @@ function removeIngredientRow(button) {
         .remove();
 
 }
+
 
 
 /* =====================================================
@@ -1760,10 +1889,6 @@ function addProduction() {
 
     }
 
-
-    /* -----------------------------------------------
-       READ INGREDIENTS
-    ------------------------------------------------ */
 
     const rows =
         document.querySelectorAll(
@@ -1838,10 +1963,6 @@ function addProduction() {
     }
 
 
-    /* -----------------------------------------------
-       CHECK STOCK BEFORE CHANGING ANYTHING
-    ------------------------------------------------ */
-
     const shortages = [];
 
 
@@ -1885,10 +2006,6 @@ function addProduction() {
     );
 
 
-    /* -----------------------------------------------
-       BLOCK PRODUCTION
-    ------------------------------------------------ */
-
     if (
         shortages.length > 0
     ) {
@@ -1927,10 +2044,6 @@ function addProduction() {
     }
 
 
-    /* -----------------------------------------------
-       CONFIRM PRODUCTION
-    ------------------------------------------------ */
-
     openConfirm(
 
         "Confirm production",
@@ -1953,6 +2066,7 @@ function addProduction() {
 }
 
 
+
 /* =====================================================
    COMPLETE PRODUCTION
 ===================================================== */
@@ -1967,13 +2081,10 @@ function completeProduction(
     const stock =
         getStock();
 
+
     const productionId =
         createID();
 
-
-    /* -----------------------------------------------
-       DEDUCT RAW MATERIALS
-    ------------------------------------------------ */
 
     ingredients.forEach(
         function(ingredient) {
@@ -2024,10 +2135,6 @@ function completeProduction(
     );
 
 
-    /* -----------------------------------------------
-       SAVE PRODUCTION
-    ------------------------------------------------ */
-
     const production =
         getProduction();
 
@@ -2066,10 +2173,6 @@ function completeProduction(
     );
 
 
-    /* -----------------------------------------------
-       CLEAR
-    ------------------------------------------------ */
-
     document.getElementById(
         "productionProduct"
     ).value = "";
@@ -2101,6 +2204,7 @@ function completeProduction(
                 type="number"
                 min="0"
                 step="0.01"
+                inputmode="decimal"
                 placeholder="Quantity used"
                 class="ingredient-quantity border border-gray-300 p-3 outline-none"
             >
@@ -2134,6 +2238,7 @@ function completeProduction(
     );
 
 }
+
 
 
 /* =====================================================
@@ -2189,7 +2294,9 @@ function deleteProductionRecord(id) {
                 );
 
 
-            saveProduction(updatedProduction);
+            saveProduction(
+                updatedProduction
+            );
 
 
             const stock =
@@ -2242,7 +2349,9 @@ function deleteProductionRecord(id) {
                 );
 
 
-            saveStock(updatedStock);
+            saveStock(
+                updatedStock
+            );
 
 
             render();
@@ -2258,6 +2367,7 @@ function deleteProductionRecord(id) {
     );
 
 }
+
 
 
 /* =====================================================
@@ -2314,6 +2424,7 @@ function calculateFinishedProducts() {
     return products;
 
 }
+
 
 
 /* =====================================================
@@ -2379,8 +2490,7 @@ function renderFinishedProducts() {
                     label:
                         getRecordDateLabel(record),
 
-                    records:
-                        []
+                    records: []
 
                 };
 
@@ -2439,12 +2549,14 @@ function renderFinishedProducts() {
 
                     if (current <= 0) {
 
-                        status = "OUT OF STOCK";
+                        status =
+                            "OUT OF STOCK";
 
                     }
                     else if (current < 3) {
 
-                        status = "LOW STOCK";
+                        status =
+                            "LOW STOCK";
 
                     }
 
@@ -2552,6 +2664,7 @@ function renderFinishedProducts() {
 }
 
 
+
 /* =====================================================
    WARNINGS
 ===================================================== */
@@ -2588,6 +2701,11 @@ function dismissWarning(item) {
 }
 
 
+
+/* =====================================================
+   RENDER WARNINGS
+===================================================== */
+
 function renderWarnings() {
 
     const container =
@@ -2615,7 +2733,9 @@ function renderWarnings() {
                 const hidden =
                     localStorage.getItem(
                         "serene_warning_hidden_" +
-                        String(data.item).trim().toLowerCase()
+                        String(data.item)
+                            .trim()
+                            .toLowerCase()
                     );
 
 
@@ -2656,8 +2776,12 @@ function renderWarnings() {
                     function(record) {
 
                         return (
-                            String(record.item || "").trim().toLowerCase() ===
-                            String(data.item || "").trim().toLowerCase()
+                            String(record.item || "")
+                                .trim()
+                                .toLowerCase() ===
+                            String(data.item || "")
+                                .trim()
+                                .toLowerCase()
                         );
 
                     }
@@ -2800,6 +2924,7 @@ function renderWarnings() {
 }
 
 
+
 /* =====================================================
    HISTORY
 ===================================================== */
@@ -2855,8 +2980,7 @@ function renderHistory() {
                     label:
                         getRecordDateLabel(record),
 
-                    records:
-                        []
+                    records: []
 
                 };
 
@@ -2989,9 +3113,11 @@ function renderHistory() {
                                         Number(record.cost || 0) > 0
                                         ?
                                         `
+
                                         <p class="text-sm">
                                             ${money(record.cost)}
                                         </p>
+
                                         `
                                         :
                                         ""
@@ -3025,6 +3151,7 @@ function renderHistory() {
     );
 
 }
+
 
 
 /* =====================================================
@@ -3061,6 +3188,7 @@ function render() {
 
 
     let low = 0;
+
     let out = 0;
 
 
@@ -3117,11 +3245,6 @@ function render() {
         allRecords.length;
 
 
-    /*
-     * Available stock is grouped by the date each incoming
-     * stock record was added. "increase" is also treated as
-     * incoming stock.
-     */
 
     const incoming =
         allRecords
@@ -3176,7 +3299,9 @@ function render() {
 
 
         renderWarnings();
+
         renderHistory();
+
         renderFinishedProducts();
 
         return;
@@ -3201,8 +3326,7 @@ function render() {
                     label:
                         getRecordDateLabel(record),
 
-                    records:
-                        []
+                    records: []
 
                 };
 
@@ -3282,7 +3406,8 @@ function render() {
                                     </p>
 
                                     <p class="text-xs text-gray-400 mt-1">
-                                        Stock came in at ${escapeHTML(record.time || "")}
+                                        Stock came in at
+                                        ${escapeHTML(record.time || "")}
                                     </p>
 
                                 </div>
@@ -3340,7 +3465,7 @@ function render() {
                                     <button
                                         type="button"
                                         onclick="increaseStock('${safeItem}')"
-                                        class="border border-gray-300 px-3 py-2 hover:bg-gray-100">
+                                        class="border border-gray-300 px-3 py-2 hover:bg-gray-100 active:bg-gray-200">
 
                                         + Increase
 
@@ -3350,7 +3475,7 @@ function render() {
                                     <button
                                         type="button"
                                         onclick="decreaseStock('${safeItem}')"
-                                        class="border border-gray-300 px-3 py-2 hover:bg-gray-100">
+                                        class="border border-gray-300 px-3 py-2 hover:bg-gray-100 active:bg-gray-200">
 
                                         − Decrease
 
@@ -3375,10 +3500,13 @@ function render() {
 
 
     renderWarnings();
+
     renderHistory();
+
     renderFinishedProducts();
 
 }
+
 
 
 /* =====================================================
@@ -3397,6 +3525,28 @@ new Date().toLocaleDateString(
         day: "numeric"
     }
 );
+
+
+
+/* =====================================================
+   STOCK FORM
+
+   IMPORTANT FOR MOBILE
+===================================================== */
+
+document.getElementById(
+    "stockForm"
+).addEventListener(
+    "submit",
+    function(event) {
+
+        event.preventDefault();
+
+        addStock(event);
+
+    }
+);
+
 
 
 /* =====================================================
@@ -3420,6 +3570,7 @@ document.getElementById(
 
     }
 );
+
 
 
 /* =====================================================
@@ -3456,11 +3607,13 @@ window.addEventListener(
 );
 
 
+
 /* =====================================================
    INITIAL LOAD
 ===================================================== */
 
 render();
+
 
 
 /* =====================================================
